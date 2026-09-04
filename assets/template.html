@@ -1,0 +1,859 @@
+<title>{{TITLE}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+  :root {
+    --ground:      #F6F7F9;
+    --panel:       #FFFFFF;
+    --ink:         #141A22;
+    --slate:       #5C6675;
+    --slate-faint: #A6ADB9;
+    --rule:        #DDE1E8;
+    --indigo:      #3A4A9C;
+
+    --proved:      #1D6F4A;
+    --proved-bg:   #E4F0E9;
+    --refuted:     #AE2A21;
+    --refuted-bg:  #F8E4E2;
+    --conjyes:     #A9760A;
+    --conjyes-bg:  #F7EEDA;
+    --conjno:      #BC5518;
+    --conjno-bg:   #FAE9DE;
+    --open-bg:     #FFFFFF;
+
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans:  "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+    --mono:  "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0E1219;
+      --panel:       #161C25;
+      --ink:         #E7EBF1;
+      --slate:       #97A1B1;
+      --slate-faint: #5A6472;
+      --rule:        #262E3A;
+      --indigo:      #8E9DE8;
+
+      --proved:      #63C08D;
+      --proved-bg:   #14291F;
+      --refuted:     #EE8A80;
+      --refuted-bg:  #2C1917;
+      --conjyes:     #DCAE4E;
+      --conjyes-bg:  #2A2214;
+      --conjno:      #E89058;
+      --conjno-bg:   #2B1D14;
+      --open-bg:     #161C25;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0E1219;
+    --panel:       #161C25;
+    --ink:         #E7EBF1;
+    --slate:       #97A1B1;
+    --slate-faint: #5A6472;
+    --rule:        #262E3A;
+    --indigo:      #8E9DE8;
+
+    --proved:      #63C08D;
+    --proved-bg:   #14291F;
+    --refuted:     #EE8A80;
+    --refuted-bg:  #2C1917;
+    --conjyes:     #DCAE4E;
+    --conjyes-bg:  #2A2214;
+    --conjno:      #E89058;
+    --conjno-bg:   #2B1D14;
+    --open-bg:     #161C25;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 56px 28px 88px; }
+
+  /* ---- masthead ---- */
+  header { display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: .13em;
+    text-transform: uppercase; color: var(--slate);
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 600; font-size: clamp(30px, 4.4vw, 46px);
+    line-height: 1.1; margin: 0; text-wrap: balance; letter-spacing: -.012em;
+  }
+  .standfirst {
+    font-family: var(--serif); font-size: 18.5px; line-height: 1.6;
+    color: var(--slate); max-width: 62ch; margin: 0;
+  }
+  .standfirst em { color: var(--ink); font-style: italic; }
+
+  /* ---- tallies ---- */
+  .tally {
+    display: flex; flex-wrap: wrap; gap: 0; margin-top: 26px;
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  }
+  .tally > div {
+    flex: 1 1 150px; padding: 14px 18px 15px;
+    border-left: 1px solid var(--rule);
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .tally > div:first-child { border-left: 0; padding-left: 0; }
+  .tally .n {
+    font-family: var(--serif); font-size: 30px; font-weight: 600; line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .tally .k {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--slate);
+  }
+  .n.proved  { color: var(--proved); }
+  .n.refuted { color: var(--refuted); }
+  .n.open    { color: var(--slate); }
+
+  /* ---- section furniture ---- */
+  section { margin-top: 52px; }
+  h2 {
+    font-family: var(--serif); font-weight: 600; font-size: 23px; margin: 0 0 6px;
+    letter-spacing: -.005em;
+  }
+  .lede { color: var(--slate); font-size: 14.5px; max-width: 70ch; margin: 0 0 20px; }
+
+  /* ---- legend ---- */
+  .legend {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(228px, 1fr));
+    gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+    margin-bottom: 22px;
+  }
+  .legend > div { background: var(--panel); padding: 12px 14px; display: flex; gap: 11px; align-items: flex-start; }
+  .swatch {
+    width: 15px; height: 15px; border-radius: 3px; flex: 0 0 auto; margin-top: 3px;
+    border: 1.5px solid; box-sizing: border-box;
+  }
+  .sw-proved  { background: var(--proved-bg);  border-color: var(--proved); }
+  .sw-refuted { background: var(--refuted-bg); border-color: var(--refuted); }
+  .sw-conjyes { background: var(--conjyes-bg); border-color: var(--conjyes); }
+  .sw-conjno  { background: var(--conjno-bg);  border-color: var(--conjno); }
+  .sw-open    { background: var(--open-bg);    border-color: var(--slate-faint); border-style: dashed; }
+  .legend b { font-size: 13px; font-weight: 600; display: block; }
+  .legend span { font-size: 12.5px; color: var(--slate); line-height: 1.45; }
+  .legend .none { font-family: var(--mono); font-size: 11px; color: var(--slate-faint); }
+  .swatch.flagmark {
+    border: 0; color: var(--refuted); font-size: 14px; line-height: 15px;
+    text-align: center; margin-top: 2px;
+  }
+
+  /* ---- graph ---- */
+  /* the graph is wider than the reading column, so it spans the window instead */
+  .bleed {
+    width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
+    padding: 0 28px; box-sizing: border-box;
+  }
+  .figure {
+    border: 1px solid var(--rule); background: var(--panel);
+    overflow-x: auto; overflow-y: hidden;
+    display: flex;
+  }
+  .figure svg { flex: 0 0 auto; margin: 0 auto; }
+  .figure svg { display: block; }
+  .scrollnote {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--slate-faint); margin-top: 9px;
+  }
+  @media (max-width: 900px) { .bleed { padding: 0 16px; } }
+
+  .edge { fill: none; stroke: var(--rule); stroke-width: 1.1; }
+  .edge.lit { stroke: var(--indigo); stroke-width: 1.9; }
+  .node { cursor: default; }
+  .node rect {
+    stroke-width: 1.4; rx: 4;
+    fill: var(--open-bg); stroke: var(--slate-faint); stroke-dasharray: 4 3;
+  }
+  .node.proved  rect { fill: var(--proved-bg);  stroke: var(--proved);  stroke-dasharray: none; }
+  .node.refuted rect { fill: var(--refuted-bg); stroke: var(--refuted); stroke-dasharray: none; }
+  .node.conjyes rect { fill: var(--conjyes-bg); stroke: var(--conjyes); stroke-dasharray: none; }
+  .node.conjno  rect { fill: var(--conjno-bg);  stroke: var(--conjno);  stroke-dasharray: none; }
+  .node .id {
+    font-family: var(--mono); font-size: 11.5px; font-weight: 500; fill: var(--ink);
+  }
+  .node .nm { font-family: var(--sans); font-size: 10.5px; fill: var(--slate); }
+  .node.dim { opacity: .28; }
+  .node:focus { outline: none; }
+  .node:focus-visible rect { stroke: var(--indigo); stroke-width: 2.6; }
+  .node .flag { font-family: var(--sans); font-size: 10px; fill: var(--refuted); font-weight: 600; }
+  .colhead {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+    fill: var(--slate-faint); text-transform: uppercase;
+  }
+
+  /* ---- register table ---- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--rule); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 720px; background: var(--panel); }
+  th {
+    text-align: left; font-family: var(--mono); font-weight: 500; font-size: 10.5px;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--slate);
+    padding: 11px 14px; border-bottom: 1px solid var(--rule); white-space: nowrap;
+  }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.ref { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+  td.mod { font-family: var(--mono); font-size: 12px; color: var(--slate); white-space: nowrap; }
+  .pill {
+    display: inline-block; font-family: var(--mono); font-size: 10.5px; letter-spacing: .05em;
+    padding: 2px 8px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+  }
+  .p-proved  { color: var(--proved);  border-color: var(--proved);  background: var(--proved-bg); }
+  .p-refuted { color: var(--refuted); border-color: var(--refuted); background: var(--refuted-bg); }
+  .p-open    { color: var(--slate);   border-color: var(--slate-faint); background: transparent; border-style: dashed; }
+  .defect { color: var(--refuted); font-size: 12.5px; }
+  .invalid { color: var(--refuted); font-size: 12.5px; font-weight: 500; }
+  .defect::before { content: "⚑ "; }
+
+  /* ---- notes ---- */
+  .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 26px; }
+  .note h3 {
+    font-family: var(--serif); font-size: 17px; font-weight: 600; margin: 0 0 6px;
+  }
+  .note p { margin: 0 0 10px; font-size: 14px; color: var(--slate); line-height: 1.6; }
+  .note p:last-child { margin-bottom: 0; }
+  .note code, td code, .lede code {
+    font-family: var(--mono); font-size: .89em;
+    background: color-mix(in srgb, var(--indigo) 9%, transparent);
+    padding: 1px 4px; border-radius: 3px; color: var(--ink);
+  }
+  .note .anchor {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--indigo); display: block; margin-bottom: 5px;
+  }
+
+  footer {
+    margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--rule);
+    font-size: 12.5px; color: var(--slate); display: flex; flex-wrap: wrap; gap: 6px 22px;
+  }
+  footer span { font-family: var(--mono); font-size: 11.5px; }
+
+
+  /* ---- detail drawer ---- */
+  #scrim {
+    position: fixed; inset: 0; background: rgba(8,11,16,.42);
+    z-index: 40; backdrop-filter: blur(1.5px);
+  }
+  #drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 41;
+    width: min(620px, 100%); background: var(--panel);
+    transition: width .16s ease;
+    border-left: 1px solid var(--rule); display: flex; flex-direction: column;
+    box-shadow: -18px 0 44px rgba(8,11,16,.16);
+  }
+  .dh {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+    padding: 20px 24px 16px; border-bottom: 1px solid var(--rule); flex: 0 0 auto;
+  }
+  .dh-ref { font-family: var(--mono); font-size: 12px; letter-spacing: .09em; text-transform: uppercase; color: var(--slate); }
+  .dh-name { font-family: var(--serif); font-size: 22px; font-weight: 600; line-height: 1.2; margin-top: 3px; }
+  .dh-meta { display: flex; gap: 8px; align-items: center; margin-top: 9px; flex-wrap: wrap; }
+  #d-close {
+    background: transparent; border: 1px solid var(--rule); color: var(--slate);
+    width: 30px; height: 30px; border-radius: 4px; cursor: pointer; font-size: 14px;
+    flex: 0 0 auto; line-height: 1;
+  }
+  #d-close:hover { color: var(--ink); border-color: var(--slate-faint); }
+  .dbody { overflow-y: auto; padding: 0 24px 40px; }
+  .dsec { padding-top: 22px; }
+  .dsec + .dsec { border-top: 1px solid var(--rule); margin-top: 24px; }
+  .dsec h4 {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--indigo); margin: 0 0 12px; font-weight: 500;
+  }
+  #d-account { font-size: 14.5px; line-height: 1.62; margin: 0 0 14px; color: var(--ink); }
+  #d-account code, .fnote code { font-family: var(--mono); font-size: .87em;
+    background: color-mix(in srgb, var(--indigo) 10%, transparent); padding: 1px 4px; border-radius: 3px; }
+  #d-sig {
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.55; margin: 0;
+    background: var(--ground); border: 1px solid var(--rule); border-radius: 4px;
+    padding: 12px 14px; overflow-x: auto; white-space: pre; color: var(--ink);
+  }
+  .dmod { font-family: var(--mono); font-size: 11px; color: var(--slate); margin-top: 9px; }
+  .hyps { margin-top: 12px; font-size: 12.5px; color: var(--slate); }
+  .hyps b {
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--slate); display: block; margin-bottom: 5px; font-weight: 500;
+  }
+  .hyps code {
+    font-family: var(--mono); font-size: 11.5px; color: var(--ink);
+    background: color-mix(in srgb, var(--indigo) 9%, transparent);
+    padding: 1px 5px; border-radius: 3px; margin-right: 5px; display: inline-block;
+  }
+  .pstate {
+    font-family: var(--serif); font-size: 15.5px; line-height: 1.6; margin: 0 0 14px;
+    padding-left: 13px; border-left: 2px solid var(--rule); color: var(--ink);
+  }
+  .pp { font-family: var(--serif); font-size: 14.8px; line-height: 1.65; margin: 0 0 12px; color: var(--slate); }
+  .pcase {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--ink);
+    margin: 16px 0 9px; padding-bottom: 5px; border-bottom: 1px solid var(--rule);
+  }
+  .qed { font-size: 15px; color: var(--slate-faint); margin: 4px 0 0; }
+  .dbody mark {
+    background: color-mix(in srgb, var(--refuted) 15%, transparent);
+    color: var(--ink); padding: 1px 2px; border-radius: 2px;
+    box-shadow: inset 0 -2px 0 var(--refuted);
+  }
+  .fnote {
+    border-left: 3px solid var(--refuted); background: var(--refuted-bg);
+    padding: 11px 13px; margin: 0 0 15px; font-size: 13.2px; line-height: 1.55;
+    color: var(--ink); border-radius: 0 3px 3px 0;
+  }
+  .fnote::before {
+    content: "⚑ Where this fails"; display: block; font-family: var(--mono);
+    font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--refuted); margin-bottom: 5px;
+  }
+  .nofault { font-family: var(--mono); font-size: 11px; color: var(--slate-faint); margin-top: 4px; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: color-mix(in srgb, var(--indigo) 5%, transparent); }
+  tbody tr:focus-visible { outline: 2px solid var(--indigo); outline-offset: -2px; }
+  .node { cursor: pointer; }
+  #drawer.wide { width: min(1080px, 100%); }
+  @media (max-width: 620px) { #drawer, #drawer.wide { width: 100%; } }
+  @media (prefers-reduced-motion: reduce) { #drawer { transition: none; } }
+
+
+  /* ---- drawer tabs ---- */
+  .tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--rule);
+    padding: 0 24px; flex: 0 0 auto; background: var(--panel);
+  }
+  .tabs button {
+    appearance: none; background: transparent; border: 0; cursor: pointer;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--slate); padding: 12px 2px 11px; margin-right: 24px;
+    border-bottom: 2px solid transparent; white-space: nowrap;
+  }
+  .tabs button:last-child { margin-right: 0; }
+  .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--indigo); }
+  .tabs button:hover { color: var(--ink); }
+  .tabs button:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+  .pane[hidden] { display: none; }
+
+  /* ---- agda blocks ---- */
+  .code {
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.55; margin: 0;
+    background: var(--ground); border: 1px solid var(--rule); border-radius: 4px;
+    padding: 12px 14px; overflow-x: auto; white-space: pre; color: var(--ink);
+  }
+  .code.bad { border-color: var(--refuted); background: var(--refuted-bg); }
+  .errbox {
+    font-family: var(--mono); font-size: 11px; line-height: 1.5; white-space: pre-wrap;
+    color: var(--refuted); border-left: 3px solid var(--refuted);
+    padding: 9px 12px; margin: 8px 0 0; background: var(--refuted-bg); border-radius: 0 3px 3px 0;
+  }
+  .caplab {
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--slate); margin: 0 0 6px; display: flex; align-items: center; gap: 7px;
+  }
+  .caplab .dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
+  .dot.ok  { background: var(--proved); }
+  .dot.no  { background: var(--refuted); }
+  .dot.warn { background: var(--conjyes); }
+  .sbs { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 900px) { #drawer.wide .sbs { grid-template-columns: 1fr 1fr; } }
+  .quoteline {
+    font-family: var(--serif); font-size: 14.5px; line-height: 1.55; color: var(--ink);
+    border-left: 2px solid var(--slate-faint); padding-left: 13px; margin: 0 0 18px;
+  }
+  .quoteline::before {
+    content: "The paper writes"; display: block; font-family: var(--mono); font-size: 9.5px;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--slate); margin-bottom: 5px;
+  }
+  .coincide {
+    font-size: 14px; line-height: 1.6; color: var(--slate);
+    border: 1px dashed var(--rule); border-radius: 4px; padding: 16px 18px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .edge, .node { transition: opacity .12s ease, stroke .12s ease; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow" id="m-eyebrow"></div>
+    <h1 id="m-headline"></h1>
+    <p class="standfirst" id="m-standfirst"></p>
+  </header>
+
+  <div class="tally" id="m-tally"></div>
+
+  <section>
+    <h2>Legend</h2>
+    <p class="lede">Two of the five states never occur here, and that is itself a result: the paper's
+      one conjecture is neither settled nor broken.</p>
+    <div class="legend">
+      <div><span class="swatch sw-proved"></span><span><b>Proved</b>We prove it.</span></div>
+      <div><span class="swatch sw-refuted"></span><span><b>Refuted</b>We refute it <em>and</em> name the invalid step in the paper's proof.</span></div>
+      <div><span class="swatch sw-conjyes"></span><span><b>Conjectured, proved</b>The paper only conjectures it; we prove it. <span class="none">none</span></span></div>
+      <div><span class="swatch sw-conjno"></span><span><b>Conjectured, refuted</b>The paper only conjectures it; we refute it. <span class="none">none</span></span></div>
+      <div><span class="swatch sw-open"></span><span><b>Open</b>Neither proved nor refuted here.</span></div>
+      <div><span class="swatch flagmark">⚑</span><span><b>Proof defect</b>The claim stands, but a step in the paper&rsquo;s argument does not.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The dependency graph</h2>
+    <p class="lede">Laid out by longest dependency path: foundations at the left, the two type-safety
+      theorems at the right. Hover a result to light up everything it rests on; click it for both proofs side by side.</p>
+    <div class="bleed"><div class="figure"><svg id="dag" role="img" aria-label="Dependency graph of the 36 numbered results in the MPSS metatheory, coloured by proof status"></svg></div></div>
+    <div class="scrollnote">10 dependency layers · 1602&thinsp;px wide, so it fits whole on a window past about 1660&thinsp;px · click any result for its proofs</div>
+  </section>
+
+  <section>
+    <h2>Register</h2>
+    <p class="lede">Every numbered result, its status, the Agda module that carries it, and where an
+      argument fails — for the two refuted results that is the invalid step; for the seven marked ⚑
+      the claim stands and only the reasoning is broken.</p>
+    <div class="table-scroll"><table id="reg">
+      <thead><tr><th>Ref</th><th>Statement</th><th>Status</th><th>Module</th><th>Where the paper&rsquo;s argument fails</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>The two that remain</h2>
+    <div class="notes">
+      <div class="note">
+        <span class="anchor">Lemma 2 · the diamond</span>
+        <p>The printed induction is not well-founded. In the <code>Me-Pro</code>/<code>Me-Var</code>
+          case the induction hypothesis is applied to <code>α₀ ⟶≡ α₂</code>, built from the context
+          reduction by <code>Ct-Ann</code> and weakening — a hypothesis of the lemma, not a
+          subderivation of either argument, and of unrelated size.</p>
+        <p>Four families of measures fail. The obstruction is stable: <code>Me-Pro</code> needs a
+          variable lookup to outweigh its annotation at the current stack, while <code>Me-FOp</code>
+          needs a stack entry to outweigh the variable it becomes.</p>
+      </div>
+      <div class="note">
+        <span class="anchor">Lemma 1 · strong commutation</span>
+        <p>Cites Lemma 2, so the two are sequential rather than mutual. Everything else its proof
+          uses — Proposition 18 repaired, Lemmas 19, 30, 32 and 36 — is proved here, leaving six
+          diagram cases over a black-box Lemma 2.</p>
+      </div>
+      <div class="note">
+        <span class="anchor">Conjecture 8 · context independence</span>
+        <p>The paper's own open question, and the only assumption it acknowledges. Lemma 9 is the
+          single place it enters; from there it reaches Lemma 7, Lemma 6 and preservation.</p>
+        <p>Restated here without the <code>CoLC</code> premise: in <code>λx≤t.Co</code> the bound
+          <code>x</code> may occur in an inner <code>Co t</code> node, so requiring every term in the
+          context to be locally closed would assume something strictly weaker than the paper does.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer id="m-footer"></footer>
+</div>
+
+
+<div id="scrim" hidden></div>
+<aside id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="d-name">
+  <div class="dh">
+    <div>
+      <div class="dh-ref" id="d-ref"></div>
+      <div class="dh-name" id="d-name"></div>
+      <div class="dh-meta"><span id="d-pill"></span><span class="dmod" id="d-mod"></span></div>
+    </div>
+    <button id="d-close" aria-label="Close detail">&#10005;</button>
+  </div>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-pane="ours"  aria-selected="true">Our proof</button>
+    <button role="tab" data-pane="paper" aria-selected="false">Paper&rsquo;s proof</button>
+    <button role="tab" data-pane="sbs"   aria-selected="false">Side by side</button>
+  </div>
+  <div class="dbody">
+    <section class="pane" id="pane-ours">
+      <div class="dsec">
+        <p id="d-account"></p>
+        <pre id="d-sig" class="code"></pre>
+        <div id="d-hyps"></div>
+      </div>
+    </section>
+    <section class="pane" id="pane-paper" hidden>
+      <div class="dsec"><h4>As printed</h4><div id="d-paper"></div></div>
+      <div class="dsec" id="d-attempt"></div>
+    </section>
+    <section class="pane" id="pane-sbs" hidden>
+      <div class="dsec" id="d-sbs"></div>
+    </section>
+  </div>
+</aside>
+<script type="application/json" id="ledger-data">{{LEDGER_JSON}}</script>
+
+<script>
+(function () {
+  const LEDGER = JSON.parse(document.getElementById("ledger-data").textContent);
+  const META   = LEDGER.meta;
+  const DET    = LEDGER.detail;
+  const N      = LEDGER.nodes.map(n => [n.id, n.ref, n.name, n.status, n.module, n.defect]);
+  const DEP    = LEDGER.deps;
+
+  const node = new Map(N.map(r => [r[0], {
+    id:r[0], ref:r[1], name:r[2], status:r[3], mod:r[4], defect:r[5]
+  }]));
+
+  // ---- longest-path depth ----
+  const depth = new Map();
+  const deps = id => DEP[String(id)] || [];
+  (function assign() {
+    const seen = new Map();
+    const go = id => {
+      if (seen.has(id)) return seen.get(id);
+      seen.set(id, 0);
+      const d = deps(id).length ? Math.max(...deps(id).map(go)) + 1 : 0;
+      seen.set(id, d); return d;
+    };
+    N.forEach(r => depth.set(r[0], go(String(r[0]))));
+  })();
+
+  // ---- layout ----
+  const NW = 128, NH = 34, COLGAP = 158, ROWGAP = 44;
+  const PAD_L = 26, PAD_T = 46, PAD_B = 22, PAD_R = 26;
+
+  const cols = new Map();
+  [...node.values()]
+    .forEach(n => { const d = depth.get(n.id); (cols.get(d) || cols.set(d, []).get(d)).push(n); });
+
+  const maxRows = Math.max(...[...cols.values()].map(c => c.length));
+  const H = PAD_T + maxRows * ROWGAP + PAD_B;
+  const W = PAD_L + (cols.size - 1) * COLGAP + NW + PAD_R;
+
+  const pos = new Map();
+  [...cols.keys()].sort((a, b) => a - b).forEach(d => {
+    const list = cols.get(d);
+    const span = list.length * ROWGAP;
+    const y0 = PAD_T + (maxRows * ROWGAP - span) / 2;
+    list.forEach((n, i) => pos.set(n.id, {
+      x: PAD_L + d * COLGAP,
+      y: y0 + i * ROWGAP
+    }));
+  });
+
+  const LABEL = { proved: "proved", refuted: "refuted", open: "open",
+                  conjyes: "proved", conjno: "refuted" };
+
+  // ---- masthead, from the data ----
+  document.getElementById("m-eyebrow").innerHTML    = META.eyebrow;
+  document.getElementById("m-headline").textContent = META.headline;
+  document.getElementById("m-standfirst").innerHTML = META.standfirst;
+  document.getElementById("m-footer").innerHTML =
+    (META.footer || []).map(t => `<span>${t}</span>`).join("");
+
+  {
+    const claimed = LEDGER.nodes.filter(n => n.status === "open" && !/^Conject/i.test(n.ref));
+    const conj    = LEDGER.nodes.filter(n => /^Conject/i.test(n.ref));
+    const count   = st => LEDGER.nodes.filter(n => n.status === st).length;
+    const defects = LEDGER.nodes.filter(n => n.defect && n.status !== "refuted").length;
+    const cells = [
+      ["proved",  count("proved") + count("conjyes"), "Proved"],
+      ["refuted", count("refuted") + count("conjno"), "Refuted"],
+      ["open",    claimed.length,                     "Claimed, still open"],
+      ["open",    conj.filter(n => n.status === "open").length, "Paper&rsquo;s own conjecture"],
+      ["",        defects,                            "Proof defects found"]
+    ].filter(c => c[1] > 0);
+    document.getElementById("m-tally").innerHTML = cells.map(
+      ([cls, n, k]) => `<div><span class="n ${cls}">${n}</span><span class="k">${k}</span></div>`).join("");
+  }
+
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("dag");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W);
+  svg.setAttribute("height", H);
+
+  const mk = (t, a) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; };
+
+  // column headers
+  [...cols.keys()].sort((a, b) => a - b).forEach(d => {
+    const t = mk("text", { class: "colhead", x: PAD_L + d * COLGAP, y: 24 });
+    t.textContent = d === 0 ? "foundations" : "layer " + d;
+    svg.appendChild(t);
+  });
+
+  // edges: from dependency (right edge) to dependent (left edge)
+  const edgeEls = [];
+  Object.keys(DEP).forEach(k => {
+    const child = +k;
+    DEP[child].forEach(parent => {
+      const a = pos.get(parent), b = pos.get(child);
+      if (!a || !b) return;
+      const x1 = a.x + NW, y1 = a.y + NH / 2;
+      const x2 = b.x,      y2 = b.y + NH / 2;
+      const dx = Math.max(28, (x2 - x1) * 0.5);
+      const p = mk("path", { class: "edge", d: `M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}` });
+      svg.appendChild(p);
+      edgeEls.push({ el: p, from: parent, to: child });
+    });
+  });
+
+  // nodes
+  const nodeEls = new Map();
+  [...node.values()].forEach(n => {
+    const p = pos.get(n.id);
+    const g = mk("g", { class: "node " + n.status, tabindex: "0" });
+    g.appendChild(mk("rect", { x: p.x, y: p.y, width: NW, height: NH }));
+    const id = mk("text", { class: "id", x: p.x + 9, y: p.y + 14 });
+    id.textContent = n.ref;
+    g.appendChild(id);
+    const nm = mk("text", { class: "nm", x: p.x + 9, y: p.y + 26 });
+    nm.textContent = n.name.length > 24 ? n.name.slice(0, 23) + "…" : n.name;
+    g.appendChild(nm);
+    if (n.defect && n.status !== "refuted") {
+      const f = mk("text", { class: "flag", x: p.x + NW - 13, y: p.y + 14 });
+      f.textContent = "⚑";
+      g.appendChild(f);
+    }
+    const title = mk("title", {});
+    title.textContent = n.ref + " — " + n.name + (n.defect ? "\n⚑ " + n.defect : "");
+    g.appendChild(title);
+    svg.appendChild(g);
+    nodeEls.set(n.id, g);
+  });
+
+  // ---- hover: light the ancestor cone ----
+  const ancestors = id => {
+    const out = new Set(), stack = [id];
+    while (stack.length) {
+      const c = stack.pop();
+      deps(c).forEach(p => { if (!out.has(p)) { out.add(p); stack.push(p); } });
+    }
+    return out;
+  };
+
+  const clear = () => {
+    nodeEls.forEach(g => g.classList.remove("dim"));
+    edgeEls.forEach(e => e.el.classList.remove("lit"));
+  };
+
+  const light = id => {
+    const keep = ancestors(id); keep.add(id);
+    nodeEls.forEach((g, k) => g.classList.toggle("dim", !keep.has(k)));
+    edgeEls.forEach(e => e.el.classList.toggle("lit", keep.has(e.from) && keep.has(e.to)));
+  };
+
+  nodeEls.forEach((g, id) => {
+    g.addEventListener("mouseenter", () => light(id));
+    g.addEventListener("focus", () => light(id));
+    g.addEventListener("mouseleave", clear);
+    g.addEventListener("blur", clear);
+  });
+
+  // ---- register table ----
+  const tb = document.querySelector("#reg tbody");
+  N.forEach(r => {
+    const n = node.get(r[0]);
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      `<td class="ref">${n.ref}</td>` +
+      `<td>${n.name}</td>` +
+      `<td><span class="pill p-${n.status}">${LABEL[n.status]}</span></td>` +
+      `<td class="mod">${n.mod}</td>` +
+      `<td>${n.defect ? (n.status === "refuted" ? `<span class="invalid">${n.defect}</span>` : `<span class="defect">${n.defect}</span>`) : ""}</td>`;
+    tr.tabIndex = 0;
+    tr.addEventListener("click", () => openDetail(r[0]));
+    tr.addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); openDetail(r[0]); }
+    });
+    tb.appendChild(tr);
+  });
+
+  // ---------- detail drawer ----------
+  const drawer = document.getElementById("drawer");
+  const scrim  = document.getElementById("scrim");
+  const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const norm = t => t.replace(/\s+/g, " ").trim();
+
+  const STRUCT = /^(Proof\.|Case |Rule |Subcase |Else|If |∎|Diagrammatically)/;
+
+  function blocks(lines) {
+    const out = []; let buf = [];
+    const flush = () => { if (buf.length) { out.push({ t: "p", s: buf.join(" ") }); buf = []; } };
+    lines.forEach((l, i) => {
+      if (i === 0) return;                       // header line: the drawer shows it already
+      if (l === "•") return;
+      if (l === "∎") { flush(); out.push({ t: "qed" }); return; }
+      if (/^(Proof\.|Case |Rule |Subcase )/.test(l)) { flush(); out.push({ t: "h", s: l }); return; }
+      buf.push(l);
+      if (/:$/.test(l)) flush();
+    });
+    flush(); return out;
+  }
+
+  function renderPaper(v, host) {
+    host.textContent = "";
+    const used = new Set();
+    let seenProof = false;
+    blocks(v.paper).forEach(b => {
+      if (b.t === "qed") {
+        const e = document.createElement("div"); e.className = "qed"; e.textContent = "∎";
+        host.appendChild(e); return;
+      }
+      if (b.t === "h") {
+        if (/^Proof\./.test(b.s)) seenProof = true;
+        const e = document.createElement("div"); e.className = "pcase"; e.textContent = b.s;
+        host.appendChild(e); return;
+      }
+      const e = document.createElement("p");
+      e.className = seenProof ? "pp" : "pstate";
+      let html = esc(norm(b.s));
+      const notes = [];
+      v.faults.forEach((f, k) => {
+        const q = esc(norm(f.q));
+        const i = html.indexOf(q);
+        if (i >= 0 && !used.has(k)) {
+          used.add(k);
+          html = html.slice(0, i) + "<mark>" + q + "</mark>" + html.slice(i + q.length);
+          notes.push(f.note);
+        }
+      });
+      e.innerHTML = html;
+      host.appendChild(e);
+      notes.forEach(nt => {
+        host.appendChild(elh("div", "fnote", nt));
+      });
+    });
+    // any fault whose sentence straddled a paragraph break still gets shown
+    v.faults.forEach((f, k) => {
+      if (used.has(k)) return;
+      host.appendChild(elh("div", "fnote", f.note));
+    });
+    if (!v.faults.length) {
+      const d = document.createElement("div"); d.className = "nofault";
+      d.textContent = "No fault found in this argument.";
+      host.appendChild(d);
+    }
+  }
+
+
+  // ---------- tabs ----------
+  const panes = { ours: document.getElementById("pane-ours"),
+                  paper: document.getElementById("pane-paper"),
+                  sbs: document.getElementById("pane-sbs") };
+  const tabBtns = [...document.querySelectorAll(".tabs button")];
+  function showPane(k) {
+    Object.entries(panes).forEach(([n, el]) => { el.hidden = n !== k; });
+    tabBtns.forEach(b => b.setAttribute("aria-selected", String(b.dataset.pane === k)));
+    drawer.classList.toggle("wide", k === "sbs");
+    drawer.querySelector(".dbody").scrollTop = 0;
+  }
+  tabBtns.forEach(b => b.addEventListener("click", () => showPane(b.dataset.pane)));
+
+  const el = (tag, cls, txt) => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (txt !== undefined) e.textContent = txt;
+    return e;
+  };
+  const elh = (tag, cls, html) => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  };
+  const cap = (label, kind) => {
+    const d = el("div", "caplab");
+    if (kind) d.appendChild(el("span", "dot " + kind));
+    d.appendChild(el("span", null, label));
+    return d;
+  };
+
+  function renderAttempt(v, host) {
+    host.textContent = "";
+    const a = v.agda;
+    if (!a) {
+      host.appendChild(el("div", "coincide",
+        "The paper's argument and ours take the same steps here, so there is no separate transcription — the Agda above follows it directly."));
+      return;
+    }
+    host.appendChild(el("h4", null, "The same argument, written in Agda"));
+    if (a.quote) host.appendChild(el("p", "quoteline", a.quote));
+    if (!a.paper) { host.appendChild(elh("div", "coincide", a.note)); return; }
+    host.appendChild(cap(a.err ? "As the paper writes it — rejected" : "As the paper writes it", a.err ? "no" : null));
+    host.appendChild(el("pre", "code" + (a.err ? " bad" : ""), a.paper));
+    if (a.err) host.appendChild(el("div", "errbox", a.err));
+    if (a.note) { const q = elh("p", "pp", a.note); q.style.marginTop = "14px"; host.appendChild(q); }
+  }
+
+  function renderSbs(v, host, n) {
+    host.textContent = "";
+    const a = v.agda;
+    host.appendChild(el("h4", null, "The paper's step against ours"));
+    if (!a || !a.paper) {
+      host.appendChild(elh("div", "coincide", a && a.note
+        ? a.note
+        : "Nothing to set apart: the paper's argument and ours take the same steps, so the Agda under “Our proof” is the transcription of both."));
+      return;
+    }
+    if (a.quote) host.appendChild(el("p", "quoteline", a.quote));
+    const grid = el("div", "sbs");
+    const left = el("div"), right = el("div");
+    left.appendChild(cap(a.err ? "The paper — rejected" : "The paper", a.err ? "no" : null));
+    left.appendChild(el("pre", "code" + (a.err ? " bad" : ""), a.paper));
+    if (a.err) left.appendChild(el("div", "errbox", a.err));
+    const okLabel = n.status === "refuted" ? "Ours — the refutation" : "Ours — accepted";
+    right.appendChild(cap(okLabel, n.status === "refuted" ? "no" : "ok"));
+    right.appendChild(el("pre", "code", a.ours));
+    grid.appendChild(left); grid.appendChild(right);
+    host.appendChild(grid);
+    if (a.note) { const q = elh("p", "pp", a.note); q.style.marginTop = "16px"; host.appendChild(q); }
+  }
+
+  let lastFocus = null;
+
+  function openDetail(id) {
+    const n = node.get(id), v = DET[String(id)];
+    if (!v) return;
+    lastFocus = document.activeElement;
+    document.getElementById("d-ref").textContent = n.ref;
+    document.getElementById("d-name").textContent = n.name;
+    document.getElementById("d-pill").innerHTML =
+      `<span class="pill p-${n.status}">${LABEL[n.status]}</span>`;
+    document.getElementById("d-mod").textContent = v.module;
+    document.getElementById("d-account").innerHTML = v.account;
+    document.getElementById("d-sig").textContent = v.sig || "—";
+    const hy = document.getElementById("d-hyps");
+    hy.innerHTML = (v.hyps && v.hyps.length)
+      ? "<div class='hyps'><b>Proved conditionally on</b>" +
+        v.hyps.map(h => `<code>${h}</code>`).join("") + "</div>"
+      : "";
+    renderPaper(v, document.getElementById("d-paper"));
+    renderAttempt(v, document.getElementById("d-attempt"));
+    renderSbs(v, document.getElementById("d-sbs"), n);
+    showPane("ours");
+    scrim.hidden = false; drawer.hidden = false;
+    document.getElementById("d-close").focus();
+  }
+
+  function closeDetail() {
+    drawer.hidden = true; scrim.hidden = true;
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  document.getElementById("d-close").addEventListener("click", closeDetail);
+  scrim.addEventListener("click", closeDetail);
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !drawer.hidden) closeDetail(); });
+
+  nodeEls.forEach((g, id) => {
+    g.addEventListener("click", () => openDetail(id));
+    g.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDetail(id); }
+    });
+  });
+
+})();
+</script>
