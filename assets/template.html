@@ -17,10 +17,9 @@
     --proved-bg:   #E4F0E9;
     --refuted:     #AE2A21;
     --refuted-bg:  #F8E4E2;
-    --conjyes:     #A9760A;
-    --conjyes-bg:  #F7EEDA;
-    --conjno:      #BC5518;
-    --conjno-bg:   #FAE9DE;
+    --edited:      #2F5FB3;
+    --edited-bg:   #E2EAF8;
+    --warn:        #A9760A;
     --open-bg:     #FFFFFF;
 
     --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -42,10 +41,9 @@
       --proved-bg:   #14291F;
       --refuted:     #EE8A80;
       --refuted-bg:  #2C1917;
-      --conjyes:     #DCAE4E;
-      --conjyes-bg:  #2A2214;
-      --conjno:      #E89058;
-      --conjno-bg:   #2B1D14;
+      --edited:      #7FA3EC;
+      --edited-bg:   #17233A;
+      --warn:        #DCAE4E;
       --open-bg:     #161C25;
     }
   }
@@ -63,10 +61,9 @@
     --proved-bg:   #14291F;
     --refuted:     #EE8A80;
     --refuted-bg:  #2C1917;
-    --conjyes:     #DCAE4E;
-    --conjyes-bg:  #2A2214;
-    --conjno:      #E89058;
-    --conjno-bg:   #2B1D14;
+    --edited:      #7FA3EC;
+    --edited-bg:   #17233A;
+    --warn:        #DCAE4E;
     --open-bg:     #161C25;
   }
 
@@ -140,9 +137,9 @@
   }
   .sw-proved  { background: var(--proved-bg);  border-color: var(--proved); }
   .sw-refuted { background: var(--refuted-bg); border-color: var(--refuted); }
-  .sw-conjyes { background: var(--conjyes-bg); border-color: var(--conjyes); }
-  .sw-conjno  { background: var(--conjno-bg);  border-color: var(--conjno); }
-  .sw-open    { background: var(--open-bg);    border-color: var(--slate-faint); border-style: dashed; }
+  .sw-edited  { background: var(--edited-bg);  border-color: var(--edited); }
+  .swatch.markmark { border: 0; font-family: var(--mono); font-weight: 700; font-size: 13px; line-height: 15px; text-align: center; color: var(--refuted); margin-top: 2px; }
+  .sw-open    { background: var(--open-bg);    border-color: var(--slate-faint); }
   .legend b { font-size: 13px; font-weight: 600; display: block; }
   .legend span { font-size: 12.5px; color: var(--slate); line-height: 1.45; }
   .legend .none { font-family: var(--mono); font-size: 11px; color: var(--slate-faint); }
@@ -150,6 +147,117 @@
     border: 0; color: var(--refuted); font-size: 14px; line-height: 15px;
     text-align: center; margin-top: 2px;
   }
+  .swatch.rmark { border: 0; color: var(--indigo); font-size: 15px; line-height: 15px; text-align: center; margin-top: 2px; font-weight: 600; }
+  .repair { font-size: 12.5px; color: var(--ink); }
+  .repair .rk {
+    display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: .06em;
+    text-transform: uppercase; padding: 1px 6px; border-radius: 3px; margin-right: 6px;
+    border: 1px solid var(--slate-faint); color: var(--slate); white-space: nowrap;
+  }
+  .repair .rk.proved  { color: var(--proved);  border-color: var(--proved);  background: var(--proved-bg); }
+  .repair .rk.refuted { color: var(--refuted); border-color: var(--refuted); background: var(--refuted-bg); }
+  .drepair { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--indigo); background: color-mix(in srgb, var(--indigo) 7%, transparent); border-radius: 0 3px 3px 0; font-size: 13.2px; line-height: 1.55; }
+  .drepair b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo); display: block; margin-bottom: 5px; font-weight: 500; }
+  .vers { margin-top: 16px; }
+  .vers > b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo); display: block; margin-bottom: 8px; font-weight: 500; }
+  .ver { border: 1px solid var(--rule); border-radius: 5px; margin-bottom: 8px; background: var(--panel); }
+  .ver > summary { list-style: none; cursor: pointer; padding: 9px 12px 9px 40px; position: relative; font-size: 13.2px; line-height: 1.5; }
+  .ver > summary::-webkit-details-marker { display: none; }
+  .ver > summary::before {
+    content: attr(data-n); position: absolute; left: 12px; top: 10px; width: 18px; height: 18px;
+    border-radius: 50%; border: 1px solid var(--slate-faint); font-family: var(--mono); font-size: 10px;
+    display: flex; align-items: center; justify-content: center; color: var(--slate); background: var(--panel);
+  }
+  .ver.proved > summary::before, .ver.checked > summary::before   { border-color: var(--proved);  color: var(--proved);  background: var(--proved-bg); }
+  .ver.refuted > summary::before, .ver.rejected > summary::before { border-color: var(--refuted); color: var(--refuted); background: var(--refuted-bg); }
+  .ver.open > summary::before { border-color: var(--warn); color: var(--warn); }
+  .ver.invalidated > summary::before { border-color: var(--refuted); color: var(--refuted); border-style: double; }
+  .ver.experiment > summary::before { border-color: var(--indigo); color: var(--indigo); }
+  .ver.paper > summary::before { border-style: dashed; }
+  .ver > summary .ok { display: inline-block; font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; margin-right: 6px; color: var(--slate); }
+  .ver.proved > summary .ok, .ver.checked > summary .ok { color: var(--proved); }
+  .ver.refuted > summary .ok, .ver.rejected > summary .ok { color: var(--refuted); }
+  .ver.open > summary .ok { color: var(--warn); }
+  .ver.invalidated > summary .ok { color: var(--refuted); }
+  .ver.experiment > summary .ok { color: var(--indigo); }
+  .ver > summary .kind { display: inline-block; font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; margin-right: 8px; color: var(--slate); border: 1px solid var(--rule); border-radius: 3px; padding: 0 5px; }
+  .ver > summary .kind.repair, .ver > summary .kind.variant { color: var(--edited); border-color: var(--edited); }
+  .ver > summary .where { font-family: var(--mono); font-size: 11px; color: var(--slate); }
+  .ver > summary .why { color: var(--slate); display: block; margin-top: 2px; }
+  .ver > summary .because { color: var(--ink); display: block; margin-top: 4px; }
+  .ver > summary .because::before { content: "Because "; font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--indigo); margin-right: 4px; }
+  .ver .vbody { padding: 0 12px 12px; border-top: 1px solid var(--rule); }
+  .ver .vbody .caplab { margin-top: 10px; }
+  .ver .vbody .nodef { font-family: var(--mono); font-size: 11px; color: var(--slate-faint); margin-top: 10px; }
+  .diff { margin-top: 16px; }
+  .diff > b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo); display: block; margin-bottom: 8px; font-weight: 500; }
+  .diff .pick { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; font-size: 12.5px; color: var(--slate); }
+  .diff select { font-family: var(--sans); font-size: 12.5px; color: var(--ink); background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 4px 6px; max-width: 46%; }
+  .diff button { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--indigo); background: transparent; border: 1px solid var(--indigo); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+  .diff button:hover, .diff button:focus-visible { background: color-mix(in srgb, var(--indigo) 10%, transparent); outline: none; }
+  #cmp {
+    position: fixed; z-index: 70; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: min(1400px, calc(100vw - 40px)); max-height: calc(100vh - 40px); overflow: auto;
+    background: var(--panel); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px;
+    box-shadow: 0 24px 60px rgba(8,11,16,.28); padding: 18px 22px 22px;
+  }
+  .cmp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+  .cmp-title { font-family: var(--serif); font-size: 19px; font-weight: 600; }
+  #cmp-close { background: transparent; border: 1px solid var(--rule); color: var(--slate); width: 30px; height: 30px; border-radius: 4px; cursor: pointer; font-size: 14px; flex: 0 0 auto; }
+  .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 900px) { .cmp-grid { grid-template-columns: 1fr; } }
+  .cmp-col pre { margin: 0; max-height: 70vh; overflow: auto; }
+  .cmp-col .l { display: block; padding: 0 6px; min-height: 1.5em; }
+  .cmp-col .del { background: color-mix(in srgb, var(--refuted) 16%, transparent); }
+  .cmp-col .add { background: color-mix(in srgb, var(--proved) 16%, transparent); }
+  .cmp-col .pad { opacity: .35; }
+  .cmp-note { font-size: 12.5px; color: var(--slate); margin: -6px 0 12px; }
+  .ver > summary .chg { display: block; margin-top: 4px; font-size: 12px; color: var(--slate); }
+  .ver > summary .chg b { font-weight: 600; color: var(--ink); }
+  .log { display: flex; flex-direction: column; gap: 14px; }
+  .chgcard { border: 1px solid var(--rule); background: var(--panel); padding: 14px 16px; border-radius: 5px; }
+  .chgcard .when { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--indigo); }
+  .chgcard h3 { font-family: var(--serif); font-size: 17px; font-weight: 600; margin: 3px 0 6px; }
+  .chgcard p { margin: 0 0 8px; font-size: 14px; color: var(--slate); line-height: 1.6; }
+  .chgcard ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.55; }
+  .chgcard li .ok { font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; margin-right: 6px; color: var(--slate); }
+  .chgcard li .ok.proved, .chgcard li .ok.checked { color: var(--proved); }
+  .chgcard li .ok.refuted, .chgcard li .ok.rejected { color: var(--refuted); }
+  .chgcard li .ok.open { color: var(--warn); }
+  .chgcard li .ok.invalidated { color: var(--refuted); }
+  .chgcard li .ok.experiment { color: var(--indigo); }
+  .rules { margin-top: 14px; }
+  .rules > b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo); display: block; margin-bottom: 6px; font-weight: 500; }
+  .rules table { min-width: 0; font-size: 12.5px; }
+  .rules td, .rules th { padding: 6px 10px; }
+  .rules td.c { font-family: var(--mono); font-size: 11.5px; white-space: nowrap; }
+  .rules td.r { font-family: var(--serif); font-size: 13.5px; white-space: nowrap; }
+  .rules td.n { color: var(--slate); }
+  .rules .fid { font-size: 13px; color: var(--ink); margin: 0 0 8px; }
+  .origin { display: inline-block; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; border: 1px solid var(--slate-faint); color: var(--slate); margin-left: 8px; }
+  .hist { margin-top: 18px; }
+  .hist > b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo); display: block; margin-bottom: 8px; font-weight: 500; }
+  .hist ol { list-style: none; margin: 0; padding: 0; counter-reset: step; }
+  .hist li { position: relative; padding: 0 0 12px 30px; counter-increment: step; font-size: 13.2px; line-height: 1.55; }
+  .hist li::before {
+    content: counter(step); position: absolute; left: 0; top: 2px; width: 18px; height: 18px;
+    border-radius: 50%; border: 1px solid var(--slate-faint); font-family: var(--mono); font-size: 10px;
+    display: flex; align-items: center; justify-content: center; color: var(--slate); background: var(--panel);
+  }
+  .hist li::after { content: ""; position: absolute; left: 9px; top: 22px; bottom: -2px; width: 1px; background: var(--rule); }
+  .hist li:last-child::after { display: none; }
+  .hist li.proved::before  { border-color: var(--proved);  color: var(--proved);  background: var(--proved-bg); }
+  .hist li.refuted::before { border-color: var(--refuted); color: var(--refuted); background: var(--refuted-bg); }
+  .hist li.open::before { border-color: var(--warn); color: var(--warn); }
+  .hist li.experiment::before { border-color: var(--indigo); color: var(--indigo); }
+  .hist .ok { display: inline-block; font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; margin-right: 6px; color: var(--slate); }
+  .hist li.proved .ok { color: var(--proved); }
+  .hist li.refuted .ok { color: var(--refuted); }
+  .hist li.open .ok { color: var(--warn); }
+  .hist li.invalidated .ok { color: var(--refuted); }
+  .hist li.experiment .ok { color: var(--indigo); }
+  .hist .where { font-family: var(--mono); font-size: 11px; color: var(--slate); }
+  .hist .why { color: var(--slate); display: block; margin-top: 2px; }
 
   /* ---- graph ---- */
   /* the graph is wider than the reading column, so it spans the window instead */
@@ -170,17 +278,50 @@
   }
   @media (max-width: 900px) { .bleed { padding: 0 16px; } }
 
-  .edge { fill: none; stroke: var(--rule); stroke-width: 1.1; }
-  .edge.lit { stroke: var(--indigo); stroke-width: 1.9; }
+  /* no edges: on hover the node and what it uses directly take a strong outline,
+     the rest of its dependency cone stays as it is, everything else dims */
+  .group rect { fill: color-mix(in srgb, var(--indigo) 5%, transparent); stroke: var(--indigo); stroke-opacity: .45; stroke-width: 1; stroke-dasharray: 5 3; }
+  .node.direct rect { stroke: var(--indigo); stroke-width: 3; stroke-dasharray: none;
+    filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 8px rgba(255,255,255,.75)); }
+  .node.self rect { stroke: var(--ink); stroke-width: 2.6; stroke-dasharray: none; }
   .node { cursor: default; }
   .node rect {
-    stroke-width: 1.4; rx: 4;
-    fill: var(--open-bg); stroke: var(--slate-faint); stroke-dasharray: 4 3;
+    stroke-width: 1.4;
+    fill: var(--open-bg); stroke: var(--slate-faint);
   }
-  .node.proved  rect { fill: var(--proved-bg);  stroke: var(--proved);  stroke-dasharray: none; }
-  .node.refuted rect { fill: var(--refuted-bg); stroke: var(--refuted); stroke-dasharray: none; }
-  .node.conjyes rect { fill: var(--conjyes-bg); stroke: var(--conjyes); stroke-dasharray: none; }
-  .node.conjno  rect { fill: var(--conjno-bg);  stroke: var(--conjno);  stroke-dasharray: none; }
+  .node.c-green rect { fill: var(--proved-bg);  stroke: var(--proved);  stroke-dasharray: none; }
+  .node.c-red   rect { fill: var(--refuted-bg); stroke: var(--refuted); stroke-dasharray: none; }
+  .node.c-blue  rect { fill: var(--edited-bg);  stroke: var(--edited);  stroke-dasharray: none; }
+  .node.c-none  rect { fill: var(--open-bg);    stroke: var(--slate-faint); stroke-dasharray: none; }
+
+  .node .mark { font-family: var(--mono); font-size: 13px; font-weight: 700; }
+  .node .mark.bang { fill: var(--refuted); }
+  .node .mark.quest { fill: var(--warn); }
+  .node.fn .id { font-family: var(--mono); font-size: 10.5px; font-weight: 500; fill: var(--slate); }
+  .node.fn .nm { font-family: var(--mono); font-size: 9.5px; fill: var(--slate-faint); }
+  .sw-fn { background: var(--panel); border-color: var(--slate-faint); border-radius: 0; }
+  .sw-group { background: color-mix(in srgb, var(--indigo) 8%, transparent); border-color: var(--indigo); border-style: dashed; border-radius: 4px; }
+  .p-fn { color: var(--slate); border-color: var(--slate-faint); background: var(--panel); }
+  .dbody a.xref.fn { border-bottom-color: var(--slate-faint); border-bottom-style: dashed; }
+  .node.type .id { font-family: var(--mono); font-size: 10.5px; font-weight: 500; }
+  .node.type .nm { font-family: var(--mono); font-size: 9.5px; fill: var(--slate-faint); }
+  .sw-type { background: var(--ground); border-color: var(--slate-faint); border-radius: 7px; }
+  .p-type { color: var(--slate); border-color: var(--slate-faint); background: var(--ground); }
+  .dbody a.xref { color: var(--indigo); text-decoration: none; border-bottom: 1px dotted color-mix(in srgb, var(--indigo) 55%, transparent); }
+  .dbody a.xref:hover, .dbody a.xref:focus-visible { border-bottom-style: solid; outline: none; }
+  .dbody a.xref.ctor { border-bottom-color: var(--proved); }
+  .dbody a.xref.ty { border-bottom-color: var(--slate-faint); }
+  #tip {
+    position: fixed; z-index: 60; max-width: min(560px, calc(100vw - 32px)); max-height: 40vh; overflow: auto;
+    background: var(--panel); color: var(--ink); border: 1px solid var(--rule); border-radius: 5px;
+    box-shadow: 0 10px 30px rgba(8,11,16,.18); padding: 9px 12px 10px; pointer-events: none;
+  }
+  #tip .tk { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo); margin-bottom: 5px; display: flex; gap: 8px; }
+  #tip .tk .m { color: var(--slate); margin-left: auto; text-transform: none; letter-spacing: 0; }
+  #tip pre { margin: 0; font-family: var(--mono); font-size: 11.5px; line-height: 1.5; white-space: pre; }
+  #tip .nm { font-family: var(--sans); font-size: 12.5px; color: var(--slate); margin-top: 5px; }
+  @media (prefers-reduced-motion: no-preference) { #tip { transition: opacity .08s ease; } }
+  #d-steps mark { display: block; background: color-mix(in srgb, var(--proved) 14%, transparent); box-shadow: none; border-left: 2px solid var(--proved); margin-left: -14px; padding-left: 12px; }
   .node .id {
     font-family: var(--mono); font-size: 11.5px; font-weight: 500; fill: var(--ink);
   }
@@ -189,6 +330,7 @@
   .node:focus { outline: none; }
   .node:focus-visible rect { stroke: var(--indigo); stroke-width: 2.6; }
   .node .flag { font-family: var(--sans); font-size: 10px; fill: var(--refuted); font-weight: 600; }
+
   .colhead {
     font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
     fill: var(--slate-faint); text-transform: uppercase;
@@ -363,7 +505,7 @@
   .caplab .dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
   .dot.ok  { background: var(--proved); }
   .dot.no  { background: var(--refuted); }
-  .dot.warn { background: var(--conjyes); }
+  .dot.warn { background: var(--warn); }
   .sbs { display: grid; grid-template-columns: 1fr; gap: 20px; }
   @media (min-width: 900px) { #drawer.wide .sbs { grid-template-columns: 1fr 1fr; } }
   .quoteline {
@@ -374,13 +516,27 @@
     content: "The paper writes"; display: block; font-family: var(--mono); font-size: 9.5px;
     letter-spacing: .12em; text-transform: uppercase; color: var(--slate); margin-bottom: 5px;
   }
+  #d-state::before { content: "The paper states"; }
+  #d-state p { margin: 0 0 6px; }
+  #d-state p:last-child { margin-bottom: 0; }
+  #d-siglab { margin-top: 4px; }
+  .types { margin-top: 14px; }
+  .types > b { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); display: block; margin-bottom: 6px; font-weight: 500; }
+  .types details { border: 1px solid var(--rule); border-radius: 4px; margin-bottom: 6px; background: var(--panel); }
+  .types summary { cursor: pointer; padding: 6px 10px; font-family: var(--mono); font-size: 11.5px; color: var(--ink); list-style: none; display: flex; gap: 10px; align-items: baseline; }
+  .types summary::-webkit-details-marker { display: none; }
+  .types summary::before { content: "▸"; color: var(--slate-faint); font-size: 10px; }
+  .types details[open] summary::before { content: "▾"; }
+  .types summary .m { color: var(--slate); font-size: 10.5px; margin-left: auto; }
+  .types pre { margin: 0; border: 0; border-top: 1px solid var(--rule); border-radius: 0 0 4px 4px; }
+  .types summary:focus-visible { outline: 2px solid var(--indigo); outline-offset: -2px; }
   .coincide {
     font-size: 14px; line-height: 1.6; color: var(--slate);
     border: 1px dashed var(--rule); border-radius: 4px; padding: 16px 18px;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .edge, .node { transition: opacity .12s ease, stroke .12s ease; }
+    .node { transition: opacity .12s ease, stroke .12s ease; }
   }
 </style>
 
@@ -396,65 +552,35 @@
 
   <section>
     <h2>Legend</h2>
-    <p class="lede">Two of the five states never occur here, and that is itself a result: the paper's
-      one conjecture is neither settled nor broken.</p>
-    <div class="legend">
-      <div><span class="swatch sw-proved"></span><span><b>Proved</b>We prove it.</span></div>
-      <div><span class="swatch sw-refuted"></span><span><b>Refuted</b>We refute it <em>and</em> name the invalid step in the paper's proof.</span></div>
-      <div><span class="swatch sw-conjyes"></span><span><b>Conjectured, proved</b>The paper only conjectures it; we prove it. <span class="none">none</span></span></div>
-      <div><span class="swatch sw-conjno"></span><span><b>Conjectured, refuted</b>The paper only conjectures it; we refute it. <span class="none">none</span></span></div>
-      <div><span class="swatch sw-open"></span><span><b>Open</b>Neither proved nor refuted here.</span></div>
-      <div><span class="swatch flagmark">⚑</span><span><b>Proof defect</b>The claim stands, but a step in the paper&rsquo;s argument does not.</span></div>
-    </div>
+    <p class="lede" id="m-legend-lede"></p>
+    <div class="legend" id="m-legend"></div>
   </section>
 
   <section>
     <h2>The dependency graph</h2>
-    <p class="lede">Laid out by longest dependency path: foundations at the left, the two type-safety
-      theorems at the right. Hover a result to light up everything it rests on; click it for both proofs side by side.</p>
-    <div class="bleed"><div class="figure"><svg id="dag" role="img" aria-label="Dependency graph of the 36 numbered results in the MPSS metatheory, coloured by proof status"></svg></div></div>
-    <div class="scrollnote">10 dependency layers · 1602&thinsp;px wide, so it fits whole on a window past about 1660&thinsp;px · click any result for its proofs</div>
+    <p class="lede">Laid out by longest dependency path: foundations at the left, the headline
+      theorems at the right. Hover a result: what it uses directly is outlined, what it rests on further down stays, and everything else fades. Click it for both proofs side by side.</p>
+    <div class="bleed"><div class="figure"><svg id="dag" role="img" aria-label="Dependency graph of the paper's numbered results, coloured by proof status"></svg></div></div>
   </section>
 
   <section>
     <h2>Register</h2>
-    <p class="lede">Every numbered result, its status, the Agda module that carries it, and where an
-      argument fails — for the two refuted results that is the invalid step; for the seven marked ⚑
-      the claim stands and only the reasoning is broken.</p>
+    <p class="lede" id="m-register-lede"></p>
     <div class="table-scroll"><table id="reg">
-      <thead><tr><th>Ref</th><th>Statement</th><th>Status</th><th>Module</th><th>Where the paper&rsquo;s argument fails</th></tr></thead>
+      <thead><tr><th>Ref</th><th>Statement</th><th>Status</th><th>Module</th><th>Where the paper&rsquo;s argument fails</th><th>Repaired or varied</th></tr></thead>
       <tbody></tbody>
     </table></div>
   </section>
 
-  <section>
-    <h2>The two that remain</h2>
-    <div class="notes">
-      <div class="note">
-        <span class="anchor">Lemma 2 · the diamond</span>
-        <p>The printed induction is not well-founded. In the <code>Me-Pro</code>/<code>Me-Var</code>
-          case the induction hypothesis is applied to <code>α₀ ⟶≡ α₂</code>, built from the context
-          reduction by <code>Ct-Ann</code> and weakening — a hypothesis of the lemma, not a
-          subderivation of either argument, and of unrelated size.</p>
-        <p>Four families of measures fail. The obstruction is stable: <code>Me-Pro</code> needs a
-          variable lookup to outweigh its annotation at the current stack, while <code>Me-FOp</code>
-          needs a stack entry to outweigh the variable it becomes.</p>
-      </div>
-      <div class="note">
-        <span class="anchor">Lemma 1 · strong commutation</span>
-        <p>Cites Lemma 2, so the two are sequential rather than mutual. Everything else its proof
-          uses — Proposition 18 repaired, Lemmas 19, 30, 32 and 36 — is proved here, leaving six
-          diagram cases over a black-box Lemma 2.</p>
-      </div>
-      <div class="note">
-        <span class="anchor">Conjecture 8 · context independence</span>
-        <p>The paper's own open question, and the only assumption it acknowledges. Lemma 9 is the
-          single place it enters; from there it reaches Lemma 7, Lemma 6 and preservation.</p>
-        <p>Restated here without the <code>CoLC</code> premise: in <code>λx≤t.Co</code> the bound
-          <code>x</code> may occur in an inner <code>Co t</code> node, so requiring every term in the
-          context to be locally closed would assume something strictly weaker than the paper does.</p>
-      </div>
-    </div>
+  <section id="m-log" hidden>
+    <h2>The log of changes</h2>
+    <p class="lede">Every change made to the development, in order, with the steps it consists of across the cards it touched. A step in one card that belongs to the same change as a step in another links to it.</p>
+    <div id="m-log-body"></div>
+  </section>
+
+  <section id="m-notes" hidden>
+    <h2 id="m-notes-title"></h2>
+    <div class="notes" id="m-notes-body"></div>
   </section>
 
   <footer id="m-footer"></footer>
@@ -462,6 +588,14 @@
 
 
 <div id="scrim" hidden></div>
+<div id="tip" hidden role="tooltip"></div>
+<div id="cmp" hidden role="dialog" aria-modal="true" aria-label="Two versions side by side">
+  <div class="cmp-head"><div class="cmp-title" id="cmp-title"></div><button id="cmp-close" aria-label="Close comparison">&#10005;</button></div>
+  <div class="cmp-grid">
+    <div class="cmp-col"><div class="caplab" id="cmp-la"></div><pre class="code" id="cmp-a"></pre></div>
+    <div class="cmp-col"><div class="caplab" id="cmp-lb"></div><pre class="code" id="cmp-b"></pre></div>
+  </div>
+</div>
 <aside id="drawer" hidden role="dialog" aria-modal="true" aria-labelledby="d-name">
   <div class="dh">
     <div>
@@ -472,24 +606,21 @@
     <button id="d-close" aria-label="Close detail">&#10005;</button>
   </div>
   <div class="tabs" role="tablist">
-    <button role="tab" data-pane="ours"  aria-selected="true">Our proof</button>
+    <button role="tab" data-pane="ours"  aria-selected="true">How it was reached</button>
     <button role="tab" data-pane="paper" aria-selected="false">Paper&rsquo;s proof</button>
-    <button role="tab" data-pane="sbs"   aria-selected="false">Side by side</button>
   </div>
   <div class="dbody">
     <section class="pane" id="pane-ours">
       <div class="dsec">
+        <div class="quoteline" id="d-state"></div>
         <p id="d-account"></p>
-        <pre id="d-sig" class="code"></pre>
-        <div id="d-hyps"></div>
+        <div id="d-steps"></div>
+        <div id="d-diff"></div>
       </div>
     </section>
     <section class="pane" id="pane-paper" hidden>
       <div class="dsec"><h4>As printed</h4><div id="d-paper"></div></div>
       <div class="dsec" id="d-attempt"></div>
-    </section>
-    <section class="pane" id="pane-sbs" hidden>
-      <div class="dsec" id="d-sbs"></div>
     </section>
   </div>
 </aside>
@@ -500,52 +631,367 @@
   const LEDGER = JSON.parse(document.getElementById("ledger-data").textContent);
   const META   = LEDGER.meta;
   const DET    = LEDGER.detail;
-  const N      = LEDGER.nodes.map(n => [n.id, n.ref, n.name, n.status, n.module, n.defect]);
+  const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const norm = t => t.replace(/\s+/g, " ").trim();
+  LEDGER.nodes.forEach(n => { if (n.status === "conjyes") n.status = "proved"; if (n.status === "conjno") n.status = "refuted"; });
+  const N      = LEDGER.nodes.map(n => [n.id, n.ref, n.name, n.status, n.module, n.defect, n.repair, n.repairStatus, n.repairKind, n.attempts, n.origin]);
   const DEP    = LEDGER.deps;
 
   const node = new Map(N.map(r => [r[0], {
-    id:r[0], ref:r[1], name:r[2], status:r[3], mod:r[4], defect:r[5]
+    id:r[0], ref:r[1], name:r[2], status:r[3], mod:r[4], defect:r[5], repair:r[6], repairStatus:r[7] || "open", repairKind:r[8] || "repaired", attempts:r[9] || [], origin:r[10] || ""
   }]));
+
+  // ---- the datatypes, as nodes of the same graph ----
+  const TYPES = LEDGER.types || [];
+  const TDEP  = LEDGER.typedeps || {};
+  TYPES.forEach(ty => node.set(String(ty.id), {
+    id: String(ty.id), ref: ty.display || ty.name, raw: ty.name, name: ty.module, status: "type", mod: ty.module, decl: ty.decl, editedFrom: ty.edited_from, account: ty.account || "", tattempts: ty.attempts || [], originalNote: ty.original || "", origin: ty.origin || "", rules: ty.rules || null, fidelity: ty.fidelity || "",
+    defect: "", repair: "", repairStatus: "open", repairKind: "repaired", attempts: [], type: true
+  }));
+  const FUNCS = LEDGER.functions || [];
+  FUNCS.forEach(f => node.set(String(f.id), {
+    id: String(f.id), ref: f.display || f.name, raw: f.name, name: f.module, status: "fn", mod: f.module,
+    decl: f.sig + "\n" + f.body, sig: f.sig, defect: "", repair: "", repairStatus: "open", repairKind: "repaired", attempts: [], type: true, fn: true, editedFrom: f.edited_from, account: f.account || "", tattempts: f.attempts || []
+  }));
+  const usedBy = new Map();
+  Object.keys(TDEP).forEach(k => {
+    if (k.startsWith("T:")) return;
+    TDEP[k].forEach(tid => (usedBy.get(String(tid)) || usedBy.set(String(tid), []).get(String(tid))).push(String(k)));
+  });
+
+  // ---- cross-references: what a mention inside the drawer links to ----
+  const REF_RE = /\b(Lemma|Theorem|Proposition|Conjecture|Corollary|Definition|Fact|Claim|Remark)\s+(\d+(?:\.\d+)*)\b/g;
+  const refIndex = new Map(N.map(r => [String(r[1]), String(r[0])]));
+  const tokenIndex = new Map();
+  {
+    const CTOR_RE = /^\s+([^\s:()]+)\s*:/;
+    const strip = q => q.replace(/[()\[\]{}]/g, "");
+    const freq = new Map();
+    TYPES.forEach(ty => ty.name.split("_").map(strip).filter(Boolean)
+      .forEach(q => freq.set(q, (freq.get(q) || 0) + 1)));
+    TYPES.forEach(ty => {
+      const id = String(ty.id);
+      tokenIndex.set(ty.name, { id });
+      const pieces = ty.name.split("_").map(strip).filter(q => q && (/[^A-Za-z]/.test(q) || q.length >= 5));
+      // a piece stands for its type only when no other declaration uses it (⟶ᵉ, ⊲, ↣ —
+      // never ⊢ or ∣); shared pieces are mapped by hand in meta.aliases
+      pieces.filter(q => freq.get(q) === 1).forEach(key => { if (!tokenIndex.has(key)) tokenIndex.set(key, { id }); });
+      ty.decl.split("\n").forEach(l => {
+        const m = CTOR_RE.exec(l);
+        if (m && !/^--/.test(m[1]) && m[1] !== "field" && m[1] !== "constructor") tokenIndex.set(m[1], { id, ctor: m[1] });
+      });
+    });
+    FUNCS.forEach(f => {
+      const id = String(f.id);
+      tokenIndex.set(f.name, { id, fn: true });
+      const pieces = f.name.split("_").map(strip).filter(q => q && (/[^A-Za-z]/.test(q) || q.length >= 5));
+      if (pieces.length === 1 && !tokenIndex.has(pieces[0]) && !freq.has(pieces[0])) tokenIndex.set(pieces[0], { id, fn: true });
+    });
+    Object.entries(META.aliases || {}).forEach(([tok, target]) => {
+      const [tid, ctor] = String(target).split("#");
+      tokenIndex.set(tok, ctor ? { id: tid, ctor } : { id: tid });
+    });
+  }
+  const SEP_RE = /([\s(),;.:\[\]{}"“”«»'’]+)/;
+  let currentCard = null;
+  const xrefAnchor = (text, target) => {
+    const a = document.createElement("a");
+    a.className = "xref" + (target.ctor ? " ctor" : target.id.startsWith("F:") ? " fn" : target.id.startsWith("T:") ? " ty" : "");
+    a.href = "#"; a.dataset.open = target.id; if (target.ctor) a.dataset.ctor = target.ctor;
+    a.textContent = text; a.title = target.ctor ? `${target.ctor} — a constructor of ${target.id.slice(2)}`
+      : target.id.startsWith("F:") ? "function " + ((node.get(target.id) || {}).ref || target.id.slice(2))
+      : target.id.startsWith("T:") ? "datatype " + ((node.get(target.id) || {}).ref || target.id.slice(2)) : (node.get(target.id) || {}).name || "";
+    return a;
+  };
+  const linkTextNode = tn => {
+    const s = tn.nodeValue;
+    const frag = document.createDocumentFragment();
+    let changed = false;
+    // a name that is also an ordinary lowercase word (`step`, `plug`) links only inside code
+    const inCode = !!tn.parentNode.closest("code, pre");
+    const emitPlain = seg => {
+      seg.split(SEP_RE).forEach((tok, i) => {
+        if (i % 2 === 1 || !tok) { if (tok) frag.appendChild(document.createTextNode(tok)); return; }
+        const hit = tokenIndex.get(tok);
+        if (hit && !inCode && /^[a-z]+$/.test(tok)) { frag.appendChild(document.createTextNode(tok)); return; }
+        if (hit && !(hit.id === currentCard && !hit.ctor)) { frag.appendChild(xrefAnchor(tok, hit)); changed = true; }
+        else frag.appendChild(document.createTextNode(tok));
+      });
+    };
+    let last = 0;
+    for (const m of s.matchAll(REF_RE)) {
+      const id = refIndex.get(m[1] + " " + m[2]);
+      emitPlain(s.slice(last, m.index));
+      if (id && id !== currentCard) { frag.appendChild(xrefAnchor(m[0], { id })); changed = true; }
+      else frag.appendChild(document.createTextNode(m[0]));
+      last = m.index + m[0].length;
+    }
+    emitPlain(s.slice(last));
+    if (changed) tn.parentNode.replaceChild(frag, tn);
+  };
+  const linkify = root => {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      if (n.parentNode.closest("a, button, .tabs, .dh")) continue;
+      if (n.nodeValue.trim()) nodes.push(n);
+    }
+    nodes.forEach(linkTextNode);
+  };
+
+  // ---- changes: steps across cards that belong to one change ----
+  const CHANGES = LEDGER.changes || [];
+  const changeById = new Map(CHANGES.map(c => [c.id, c]));
+  const members = new Map();   // change id -> [{id, idx, step, card}]
+  node.forEach((n, id) => {
+    const steps = n.type ? (n.tattempts || []) : (n.attempts || []);
+    steps.forEach((s, idx) => {
+      if (!s.change) return;
+      (members.get(s.change) || members.set(s.change, []).get(s.change)).push({ id, idx, step: s, card: n });
+    });
+  });
+  const stepLink = (m, withWhat) => `<a class="xref" href="#" data-open="${esc(m.id)}" data-step="${m.idx}">${esc(m.card.ref)}${withWhat ? "" : ""}</a>`;
 
   // ---- longest-path depth ----
   const depth = new Map();
-  const deps = id => DEP[String(id)] || [];
+  const deps = id => [...(DEP[String(id)] || []), ...(TDEP[String(id)] || [])].map(String).filter(d => node.has(d));
+  // mutual definitions share one supercard, hence one column
+  const GROUPS = (LEDGER.groups || []).map(g => ({ id: g.id, members: g.members.map(String).filter(m => node.has(m)) }))
+    .filter(g => g.members.length > 1);
+  const groupOf = new Map();
+  GROUPS.forEach(g => g.members.forEach(m => groupOf.set(m, g)));
+  // one layering for everything: longest dependency path, members of a group tied to
+  // the deepest of them, edges inside a group not counted
   (function assign() {
-    const seen = new Map();
-    const go = id => {
-      if (seen.has(id)) return seen.get(id);
-      seen.set(id, 0);
-      const d = deps(id).length ? Math.max(...deps(id).map(go)) + 1 : 0;
-      seen.set(id, d); return d;
-    };
-    N.forEach(r => depth.set(r[0], go(String(r[0]))));
+    node.forEach((_, id) => depth.set(id, 0));
+    let changed = true, guard = 0;
+    while (changed && guard++ < 500) {
+      changed = false;
+      node.forEach((_, id) => {
+        const ds = deps(id).filter(p => !(groupOf.get(p) && groupOf.get(p) === groupOf.get(id)));
+        const v = ds.length ? Math.max(...ds.map(p => depth.get(p))) + 1 : 0;
+        if (v > depth.get(id)) { depth.set(id, v); changed = true; }
+      });
+      GROUPS.forEach(g => {
+        const m = Math.max(...g.members.map(x => depth.get(x)));
+        g.members.forEach(x => { if (depth.get(x) < m) { depth.set(x, m); changed = true; } });
+      });
+    }
   })();
 
   // ---- layout ----
   const NW = 128, NH = 34, COLGAP = 158, ROWGAP = 44;
   const PAD_L = 26, PAD_T = 46, PAD_B = 22, PAD_R = 26;
 
+  // a column holds items: single nodes and supercards of a group's members
+  const GPAD = 8, GLAB = 0, GAP = ROWGAP - NH;
   const cols = new Map();
-  [...node.values()]
-    .forEach(n => { const d = depth.get(n.id); (cols.get(d) || cols.set(d, []).get(d)).push(n); });
-
-  const maxRows = Math.max(...[...cols.values()].map(c => c.length));
-  const H = PAD_T + maxRows * ROWGAP + PAD_B;
+  const placed = new Set();
+  [...node.values()].forEach(n => {
+    if (placed.has(n.id)) return;
+    const d = depth.get(n.id);
+    const g = groupOf.get(n.id);
+    const item = g ? { ids: g.members.slice(), group: g } : { ids: [n.id] };
+    item.ids.forEach(x => placed.add(x));
+    (cols.get(d) || cols.set(d, []).get(d)).push(item);
+  });
+  const itemH = it => it.group ? GLAB + GPAD + it.ids.length * NH + (it.ids.length - 1) * GAP + GPAD : NH;
+  const colH  = items => items.reduce((s, it) => s + itemH(it), 0) + (items.length - 1) * GAP;
+  const maxColH = Math.max(...[...cols.values()].map(colH));
+  const H = PAD_T + maxColH + PAD_B;
   const W = PAD_L + (cols.size - 1) * COLGAP + NW + PAD_R;
+  const maxRows = Math.round(maxColH / ROWGAP);
 
   const pos = new Map();
+  const groupBoxes = [];
   [...cols.keys()].sort((a, b) => a - b).forEach(d => {
-    const list = cols.get(d);
-    const span = list.length * ROWGAP;
-    const y0 = PAD_T + (maxRows * ROWGAP - span) / 2;
-    list.forEach((n, i) => pos.set(n.id, {
-      x: PAD_L + d * COLGAP,
-      y: y0 + i * ROWGAP
-    }));
+    const items = cols.get(d);
+    let y = PAD_T + (maxColH - colH(items)) / 2;
+    const x = PAD_L + d * COLGAP;
+    items.forEach(it => {
+      if (it.group) {
+        groupBoxes.push({ x: x - 6, y, w: NW + 12, h: itemH(it), n: it.ids.length });
+        it.ids.forEach((id, i) => pos.set(id, { x, y: y + GLAB + GPAD + i * ROWGAP }));
+      } else {
+        pos.set(it.ids[0], { x, y });
+      }
+      y += itemH(it) + GAP;
+    });
   });
 
-  const LABEL = { proved: "proved", refuted: "refuted", open: "open",
-                  conjyes: "proved", conjno: "refuted" };
+  const LABEL = { proved: "proved", refuted: "refuted", open: "open" };
+  // colour and mark, from the verdict and the repair: green = as the paper states it and
+  // typechecks; red = as stated and does not hold (! refuted, ? open); blue = edited and
+  // typechecks, the mark saying what the original was; none = edited, not yet typechecking.
+  // datatypes and functions are faithful unless meta.fidelity says "edited", "fails" or "editing"
+  const visual = n => {
+    if (n.type) {
+      const f = ((META.fidelity || {})[n.id]) || (n.editedFrom ? "edited" : "faithful");
+      return { c: f === "faithful" ? "green" : f === "edited" ? "blue" : f === "fails" ? "red" : "none", mark: "" };
+    }
+    const mark = n.status === "refuted" ? "!" : n.status === "open" ? "?" : "";
+    if (n.status === "proved") return { c: "green", mark: "" };
+    if (n.repair) return { c: n.repairStatus === "proved" ? "blue" : "none", mark };
+    // a conjecture makes no claim, so red is wrong for it: it simply has no proof yet
+    if (n.status === "open" && /^Conject/i.test(n.ref)) return { c: "none", mark };
+    return { c: "red", mark };
+  };
+  const RLABEL = { proved: "proved", refuted: "refuted", open: "open", assumed: "assumed" };
+  // ---- versions: newest at the top, the paper's original at the bottom ----
+  const versionsOf = (n, v, ctor) => {
+    const out = [];
+    if (n.type) {
+      const orig = n.editedFrom && node.get("T:" + n.editedFrom);
+      const finalDef = n.fn ? n.decl : n.decl;
+      const steps = (n.tattempts || []).map((s, i) => ({ ...s, _idx: i }));
+      const last = steps.length ? steps[steps.length - 1] : null;
+      const top = last ? { ...last } : { what: n.fn ? "The definition, as it stands." : "The declaration, as it stands.", outcome: "checked", kind: n.editedFrom ? "variant" : "original" };
+      top.def = finalDef; top.final = true; top.ctor = ctor;
+      out.push(top);
+      steps.slice(0, -1).reverse().forEach(s => out.push({ ...s }));
+      if (orig) out.push({ what: `The paper's original — <code>${esc(orig.ref)}</code>, as written in ${esc(orig.mod)}.`, outcome: "checked", kind: "original", paper: true, def: orig.decl, why: n.originalNote || "" });
+      else if (!last) { out[0].paper = true; out[0].kind = "original"; }
+      return out;
+    }
+    const steps = (n.attempts || []).map((s, i) => ({ ...s, _idx: i }));
+    const last = steps.length ? steps[steps.length - 1] : null;
+    const finalDef = (v.variant && v.variant.sig) ? v.variant.sig : (v.sig || "");
+    const top = last ? { ...last } : { what: `As it stands — ${LABEL[n.status]}.`, outcome: n.status === "proved" ? "proved" : n.status, kind: "original" };
+    top.def = finalDef || top.def; top.final = true;
+    top.extra = (v.variant && v.variant.sig && !(top.def === v.variant.sig)) ? "" : "";
+    top.built = v.types || []; top.hyps = v.hyps || [];
+    out.push(top);
+    steps.slice(0, -1).reverse().forEach(s => out.push({ ...s }));
+    // the printed statement stays as text; the definition of this version is its Agda
+    // transcription — a declared statement where one exists, else the matched definition's type
+    const stmt = statementText(v, n);
+    const blocks_ = (v.sig || "").split("\n\n").filter(b => b.trim());
+    const printedSig = blocks_.filter(b => /^[^\n]*:\s*Set\b/.test(b) && !/[′ʷ]/.test(b.split("\n")[0]))[0]
+                    || blocks_.filter(b => !/[′ʷ]/.test(b.split("\n")[0]))[0] || "";
+    if (n.origin !== "development")
+      out.push({ what: "The paper's original, as printed.", outcome: n.status, kind: "original", paper: true,
+                 why: stmt, def: printedSig });
+    return out;
+  };
+  const statementText = (v, n) => {
+    const st = [];
+    for (const b of blocks(v.paper || [])) {
+      if (b.t === "h" && /^Proof\./.test(b.s)) break;
+      if (b.t === "qed") break;
+      if (b.t === "h" || (b.s || "").startsWith(n.ref)) continue;
+      st.push(norm(b.s));
+    }
+    return st.join("\n");
+  };
+  const verHTML = (vers, n) => {
+    const total = vers.length;
+    return `<div class="vers"><b>How it was reached — ${total} version${total === 1 ? "" : "s"}, newest first${vers.some(s => s.paper) ? " · the dotted circle is the paper's original" : ""}</b>` +
+      vers.map((s, i) => {
+        const num = total - i;
+        const cls = "ver " + (s.outcome || "") + (s.paper ? " paper" : "");
+        let defHtml = "";
+        if (s.def) {
+          if (s.ctor) {
+            const CL = /^\s+([^\s:()]+)\s*:/; let inside = false;
+            defHtml = s.def.split("\n").map(l => { const m = CL.exec(l); if (m) inside = m[1] === s.ctor; else if (!l.trim()) inside = false; return inside ? `<mark>${esc(l)}</mark>` : esc(l); }).join("\n");
+          } else defHtml = esc(s.def);
+        }
+        const built = (s.built && s.built.length)
+          ? `<div class="types"><b>Built from ${s.built.length} datatype${s.built.length === 1 ? "" : "s"}</b>` +
+            s.built.map(ty => `<details><summary><span>${esc(ty.display || ty.name)}${ty.via === "variant" ? ' <span class="m">· in the repaired form</span>' : ""}</span><span class="m">${esc(ty.module)}</span></summary><pre class="code">${esc(ty.decl)}</pre></details>`).join("") + `</div>`
+          : "";
+        const hyps = (s.hyps && s.hyps.length) ? "<div class='hyps'><b>Proved conditionally on</b>" + s.hyps.map(h => `<code>${h}</code>`).join("") + "</div>" : "";
+        // a proved statement is revisited only when a change invalidates it, and the step names that change
+        // the paper's original is not a step of ours: its row says so, and the colour alone carries the verdict
+        const okLabel = s.paper && vers.length > 1 ? "as printed" : s.outcome === "invalidated" && changeById.get(s.change) ? `invalidated by ${esc(changeById.get(s.change).title)}` : (s.outcome || "");
+        return `<details class="${cls}" ${i === 0 ? "open" : ""} ${s._idx !== undefined ? `data-attempt="${s._idx}"` : ""}><summary data-n="${num}"><span class="ok">${okLabel}</span><span class="kind ${s.kind || ""}">${s.kind || ""}</span>${s.what}` +
+          (s.where ? ` <span class="where">${s.where}</span>` : "") + (s.because ? `<span class="because">${s.because}</span>` : "") + (s.why ? `<span class="why">${s.why}</span>` : "") +
+          (s.change && changeById.get(s.change) ? (() => {
+            const others = (members.get(s.change) || []).filter(m => !(m.id === n.id && m.idx === s._idx));
+            return `<span class="chg">Part of <b>${esc(changeById.get(s.change).title)}</b>` +
+              (others.length ? ` — with ${others.map(m => stepLink(m)).join(", ")}` : "") + `</span>`;
+          })() : "") + `</summary>` +
+          `<div class="vbody">` + (s.def ? `<div class="caplab">${s.paper ? "The statement, transcribed" : s.final ? "The definition, as it stands" : "The definition at this step"}</div><pre class="code">${defHtml}</pre>` : `<div class="nodef">no definition preserved as text for this step — see ${esc(s.where || "the catalogue")}</div>`) +
+          built + hyps + `</div></details>`;
+      }).join("") + `</div>`;
+  };
+  const diffHTML = (vers) => {
+    const opts = vers.map((s, i) => `<option value="${i}">${vers.length - i} · ${esc((s.what || "").replace(/<[^>]+>/g, "").slice(0, 60))}</option>`).join("");
+    return `<div class="diff"><b>Compare two versions</b><div class="pick"><select id="d-pa">${opts}</select><span>and</span><select id="d-pb">${opts}</select><button id="d-pgo" type="button">Show side by side</button></div></div>`;
+  };
+  // a line diff, for two definitions that share a signature: a repair, or a datatype's variant
+  // lines are compared modulo the primes a variant puts on its names (Me-Pro′ for Me-Pro,
+  // ⟶ᵉ′ for ⟶ᵉ) and modulo spacing, so only substantive changes are marked
+  const key = l => l.replace(/[′″‴ʷʳ]/g, "").replace(/\s+/g, " ").trim();
+  const lineDiff = (a, b) => {
+    const A = a.split("\n"), B = b.split("\n");
+    const KA = A.map(key), KB = B.map(key);
+    const n = A.length, m = B.length;
+    const L = Array.from({ length: n + 1 }, () => new Int32Array(m + 1));
+    for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
+      L[i][j] = KA[i] === KB[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    const out = []; let i = 0, j = 0;
+    while (i < n && j < m) {
+      if (KA[i] === KB[j]) { out.push(["", A[i], B[j]]); i++; j++; }
+      else if (L[i + 1][j] >= L[i][j + 1]) { out.push(["del", A[i], null]); i++; }
+      else { out.push(["add", null, B[j]]); j++; }
+    }
+    while (i < n) out.push(["del", A[i++], null]);
+    while (j < m) out.push(["add", null, B[j++]]);
+    return out;
+  };
+  const cmp = document.getElementById("cmp");
+  const showCompare = (vers, n) => {
+    const a = +document.getElementById("d-pa").value, b = +document.getElementById("d-pb").value;
+    const label = i => `${vers.length - i} · ${(vers[i].what || "").replace(/<[^>]+>/g, "")}`;
+    document.getElementById("cmp-title").textContent = n.ref + (n.name && !n.type ? " — " + n.name : "");
+    document.getElementById("cmp-la").textContent = label(a);
+    document.getElementById("cmp-lb").textContent = label(b);
+    const da = vers[a].def || "", db = vers[b].def || "";
+    const pa = document.getElementById("cmp-a"), pb = document.getElementById("cmp-b");
+    const old = cmp.querySelector(".cmp-note"); if (old) old.remove();
+    // older version on the left, whichever was chosen first
+    const [ia, ib] = a > b ? [a, b] : [b, a];
+    const diffable = da && db && a !== b &&
+      ((vers[ia].kind === "repair" || vers[ib].kind === "repair") || (n.type && (vers[ia].kind === "variant" || vers[ib].kind === "variant")));
+    if (diffable) {
+      const rows = lineDiff(vers[ia].def, vers[ib].def);
+      document.getElementById("cmp-la").textContent = label(ia);
+      document.getElementById("cmp-lb").textContent = label(ib);
+      pa.innerHTML = rows.map(([k, l]) => l === null ? `<span class="l pad"></span>` : `<span class="l ${k === "del" ? "del" : ""}">${esc(l)}</span>`).join("");
+      pb.innerHTML = rows.map(([k, , r]) => r === null ? `<span class="l pad"></span>` : `<span class="l ${k === "add" ? "add" : ""}">${esc(r)}</span>`).join("");
+      cmp.querySelector(".cmp-grid").insertAdjacentHTML("beforebegin", `<div class="cmp-note">Same signature, different body: lines only in the older version are marked on the left, lines only in the newer on the right; a prime on a name does not count as a change.</div>`);
+    } else {
+      pa.textContent = da || "no definition preserved as text for this version";
+      pb.textContent = db || "no definition preserved as text for this version";
+    }
+    linkify(cmp);
+    cmp.hidden = false;
+    document.getElementById("cmp-close").focus();
+  };
+  const hideCompare = () => { cmp.hidden = true; };
+  document.getElementById("cmp-close").addEventListener("click", hideCompare);
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !cmp.hidden) { e.stopPropagation(); hideCompare(); } }, true);
+  const renderOurs = (n, v, ctor) => {
+    const vers = versionsOf(n, v || {}, ctor);
+    document.getElementById("d-steps").innerHTML = verHTML(vers, n);
+    document.getElementById("d-diff").innerHTML = vers.length > 1 ? diffHTML(vers) : "";
+    if (vers.length > 1) {
+      document.getElementById("d-pa").value = "0";
+      document.getElementById("d-pb").value = String(vers.length - 1);
+      document.getElementById("d-pgo").addEventListener("click", () => showCompare(vers, n));
+    }
+  };
+  const histHTML = attempts => (attempts && attempts.length)
+    ? `<div class="hist"><b>How it was reached — ${attempts.length} step${attempts.length === 1 ? "" : "s"}</b><ol>` +
+      attempts.map(s => `<li class="${s.outcome || ""}"><span class="ok">${s.outcome || ""}</span>${s.what}` +
+        (s.where ? ` <span class="where">${s.where}</span>` : "") +
+        (s.why ? `<span class="why">${s.why}</span>` : "") + `</li>`).join("") + `</ol></div>`
+    : "";
+  const repairHTML = (n, steps) => n.repair
+    ? `<span class="repair"><span class="rk ${n.repairStatus}">${n.repairKind} · ${RLABEL[n.repairStatus] || n.repairStatus}</span>${n.repair}` +
+      (steps && n.attempts.length ? ` <span class="where">· ${n.attempts.length} step${n.attempts.length === 1 ? "" : "s"}</span>` : "") + `</span>`
+    : (steps && n.attempts.length ? `<span class="repair"><span class="where">${n.attempts.length} step${n.attempts.length === 1 ? "" : "s"} to the proof</span></span>` : "");
 
   // ---- masthead, from the data ----
   document.getElementById("m-eyebrow").innerHTML    = META.eyebrow;
@@ -555,19 +1001,67 @@
     (META.footer || []).map(t => `<span>${t}</span>`).join("");
 
   {
-    const claimed = LEDGER.nodes.filter(n => n.status === "open" && !/^Conject/i.test(n.ref));
-    const conj    = LEDGER.nodes.filter(n => /^Conject/i.test(n.ref));
-    const count   = st => LEDGER.nodes.filter(n => n.status === st).length;
-    const defects = LEDGER.nodes.filter(n => n.defect && n.status !== "refuted").length;
+    // the tally is of the paper's results; a lemma of the development's own is not a claim of the paper
+    const PAPER   = LEDGER.nodes.filter(n => n.origin !== "development");
+    const claimed = PAPER.filter(n => n.status === "open" && !/^Conject/i.test(n.ref));
+    const conj    = PAPER.filter(n => /^Conject/i.test(n.ref));
+    const count   = st => PAPER.filter(n => n.status === st).length;
+    const defects = PAPER.filter(n => n.defect && n.status !== "refuted").length;
     const cells = [
-      ["proved",  count("proved") + count("conjyes"), "Proved"],
-      ["refuted", count("refuted") + count("conjno"), "Refuted"],
+      ["proved",  count("proved"),  "Proved"],
+      ["refuted", count("refuted"), "Refuted"],
       ["open",    claimed.length,                     "Claimed, still open"],
       ["open",    conj.filter(n => n.status === "open").length, "Paper&rsquo;s own conjecture"],
-      ["",        defects,                            "Proof defects found"]
+      ["",        defects,                            "Proof defects found"],
+      ["",        PAPER.filter(n => n.repair).length, "Repaired or varied"],
+      ["",        LEDGER.nodes.length - PAPER.length, "Lemmas of the development&rsquo;s own"]
     ].filter(c => c[1] > 0);
     document.getElementById("m-tally").innerHTML = cells.map(
       ([cls, n, k]) => `<div><span class="n ${cls}">${n}</span><span class="k">${k}</span></div>`).join("");
+  }
+
+  {
+    const count = st => LEDGER.nodes.filter(n => n.status === st).length;
+    const words = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
+    const num = k => k < words.length ? words[k] : String(k);
+    const none = st => count(st) ? "" : ' <span class="none">none</span>';
+    document.getElementById("m-legend").innerHTML = [
+      ["sw-proved",  "Green",                "As the paper states it, written in Agda, and it typechecks — a proved result, a faithful datatype or function."],
+      ["sw-refuted", "Red",                  "As the paper states it, and it does not hold: <strong style=\"color:var(--refuted)\">!</strong> refuted, <strong style=\"color:var(--warn)\">?</strong> open, plain if the definition does not typecheck."],
+      ["sw-edited",  "Blue",                 "Edited and it typechecks — a <em>repair</em> keeps the signature and changes the body, a <em>variant</em> changes the signature. The mark still says what the original was: <strong style=\"color:var(--refuted)\">!</strong> refuted, <strong style=\"color:var(--warn)\">?</strong> open."],
+      ["sw-open",    "Uncoloured",           "Does not typecheck yet — a conjecture the paper never claimed, or an edit still in progress. <strong style=\"color:var(--warn)\">?</strong> marks the open one."],
+      ["flagmark",   "Proof defect",         "The claim stands, but a step in the paper&rsquo;s argument does not."],
+      ["sw-type",    "Datatype",             "Rounded corners. A <code>data</code> or <code>record</code> declaration a statement is built from; a result rests on the types in its statement, and a type on the types in its declaration."],
+      ["sw-fn",      "Function",             "Square corners. A definition — opening, substitution, free variables, a judgement abbreviation — that a statement, a datatype or another function is built from. Results have the slight rounding of the swatches above."],
+      ["sw-group",   "Mutual",               "Definitions that refer to each other — judgements declared together, lemmas proved by one induction — share a supercard and a layer."]
+    ].map(([sw, b, s]) => `<div><span class="swatch ${sw}">${sw === "flagmark" ? "⚑" : ""}</span><span><b>${b}</b>${s}</span></div>`).join("");
+    const unused = ["proved", "refuted", "open"].filter(st => !count(st)).length;
+    document.getElementById("m-legend-lede").innerHTML = META.legendLede || "Colour is what stands of the paper as written; the mark is what the original was." ||
+      (unused ? `${num(unused).replace(/^./, c => c.toUpperCase())} of the three states ${unused === 1 ? "never occurs" : "never occur"} here.` : "All three states occur here: proved, refuted, and open.");
+    const refuted = count("refuted");
+    const defects = LEDGER.nodes.filter(n => n.defect && n.status !== "refuted").length;
+    document.getElementById("m-register-lede").innerHTML = META.registerLede ||
+      `Every numbered result, its status, the module that carries it, and where an argument fails — ` +
+      `for the ${num(refuted)} refuted result${refuted === 1 ? "" : "s"} that is the invalid step; ` +
+      `for the ${num(defects)} marked ⚑ the claim stands and only the reasoning is broken.`;
+    if (CHANGES.length) {
+      const sorted = CHANGES.slice().sort((a, b) => String(a.when || "").localeCompare(String(b.when || "")));
+      document.getElementById("m-log-body").innerHTML = `<div class="log">` + sorted.map(c => {
+        const ms = members.get(c.id) || [];
+        return `<div class="chgcard"><div class="when">${esc(c.when || "")}</div><h3>${esc(c.title)}</h3>` +
+          (c.summary ? `<p>${c.summary}</p>` : "") +
+          (ms.length ? `<ul>` + ms.map(m => `<li><span class="ok ${m.step.outcome}">${esc(m.step.outcome)} ${esc(m.step.kind || "")}</span>${stepLink(m)} — ${m.step.what}</li>`).join("") + `</ul>` : "") + `</div>`;
+      }).join("") + `</div>`;
+      document.getElementById("m-log").hidden = false;
+    }
+    const notes = META.notes;
+    if (notes && notes.items && notes.items.length) {
+      const sec = document.getElementById("m-notes");
+      document.getElementById("m-notes-title").textContent = notes.title || "";
+      document.getElementById("m-notes-body").innerHTML = notes.items.map(it =>
+        `<div class="note"><span class="anchor">${it.anchor}</span>${it.html}</div>`).join("");
+      sec.hidden = false;
+    }
   }
 
   const NS = "http://www.w3.org/2000/svg";
@@ -587,40 +1081,41 @@
 
   // edges: from dependency (right edge) to dependent (left edge)
   const edgeEls = [];
-  Object.keys(DEP).forEach(k => {
-    const child = +k;
-    DEP[child].forEach(parent => {
-      const a = pos.get(parent), b = pos.get(child);
-      if (!a || !b) return;
-      const x1 = a.x + NW, y1 = a.y + NH / 2;
-      const x2 = b.x,      y2 = b.y + NH / 2;
-      const dx = Math.max(28, (x2 - x1) * 0.5);
-      const p = mk("path", { class: "edge", d: `M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}` });
-      svg.appendChild(p);
-      edgeEls.push({ el: p, from: parent, to: child });
-    });
+  // no edge elements: the hovered node's direct dependencies are outlined, its cone kept, the rest dimmed
+
+  // supercards for mutual definitions
+  groupBoxes.forEach(b => {
+    const g = mk("g", { class: "group" });
+    g.appendChild(mk("rect", { x: b.x, y: b.y, width: b.w, height: b.h, rx: 6 }));
+    svg.appendChild(g);
   });
 
   // nodes
   const nodeEls = new Map();
   [...node.values()].forEach(n => {
     const p = pos.get(n.id);
-    const g = mk("g", { class: "node " + n.status, tabindex: "0" });
-    g.appendChild(mk("rect", { x: p.x, y: p.y, width: NW, height: NH }));
+    const vz = visual(n);
+    const g = mk("g", { class: "node " + n.status + " c-" + vz.c + (n.fn ? " fn" : "") + (n.type && !n.fn ? " type" : ""), tabindex: "0" });
+    // corners tell the kinds apart: datatypes rounded, results nearly square, functions square
+    g.appendChild(mk("rect", { x: p.x, y: p.y, width: NW, height: NH, rx: n.fn ? 0 : (n.type ? 12 : 3) }));
     const id = mk("text", { class: "id", x: p.x + 9, y: p.y + 14 });
-    id.textContent = n.ref;
+    id.textContent = n.type ? (n.ref.length > 19 ? n.ref.slice(0, 18) + "…" : n.ref) : n.ref;
     g.appendChild(id);
     const nm = mk("text", { class: "nm", x: p.x + 9, y: p.y + 26 });
-    nm.textContent = n.name.length > 24 ? n.name.slice(0, 23) + "…" : n.name;
+    const sub = n.type ? n.mod.split(".").pop() : n.name;
+    nm.textContent = sub.length > 24 ? sub.slice(0, 23) + "…" : sub;
     g.appendChild(nm);
+    if (vz.mark) {
+      const r = mk("text", { class: "mark " + (vz.mark === "!" ? "bang" : "quest"), x: p.x + NW - 14, y: p.y + 15 });
+      r.textContent = vz.mark;
+      g.appendChild(r);
+    }
     if (n.defect && n.status !== "refuted") {
-      const f = mk("text", { class: "flag", x: p.x + NW - 13, y: p.y + 14 });
+      const f = mk("text", { class: "flag", x: p.x + NW - 13, y: p.y + 28 });
       f.textContent = "⚑";
       g.appendChild(f);
     }
-    const title = mk("title", {});
-    title.textContent = n.ref + " — " + n.name + (n.defect ? "\n⚑ " + n.defect : "");
-    g.appendChild(title);
+
     svg.appendChild(g);
     nodeEls.set(n.id, g);
   });
@@ -636,22 +1131,27 @@
   };
 
   const clear = () => {
-    nodeEls.forEach(g => g.classList.remove("dim"));
-    edgeEls.forEach(e => e.el.classList.remove("lit"));
+    nodeEls.forEach(g => g.classList.remove("dim", "direct", "self"));
   };
 
   const light = id => {
     const keep = ancestors(id); keep.add(id);
-    nodeEls.forEach((g, k) => g.classList.toggle("dim", !keep.has(k)));
-    edgeEls.forEach(e => e.el.classList.toggle("lit", keep.has(e.from) && keep.has(e.to)));
+    const direct = new Set(deps(id));
+    nodeEls.forEach((g, k) => {
+      g.classList.toggle("dim", !keep.has(k));
+      g.classList.toggle("direct", direct.has(k));
+      g.classList.toggle("self", k === id);
+    });
   };
 
   nodeEls.forEach((g, id) => {
-    g.addEventListener("mouseenter", () => light(id));
-    g.addEventListener("focus", () => light(id));
-    g.addEventListener("mouseleave", clear);
-    g.addEventListener("blur", clear);
+    const show = () => { clearTimeout(tipTimer); tipTimer = setTimeout(() => showTipAt(g.getBoundingClientRect(), tipData(id)), 160); };
+    g.addEventListener("mouseenter", () => { light(id); show(); });
+    g.addEventListener("focus", () => { light(id); show(); });
+    g.addEventListener("mouseleave", () => { clear(); hideTip(); });
+    g.addEventListener("blur", () => { clear(); hideTip(); });
   });
+  document.querySelector(".figure").addEventListener("scroll", () => hideTip(), { passive: true });
 
   // ---- register table ----
   const tb = document.querySelector("#reg tbody");
@@ -663,7 +1163,8 @@
       `<td>${n.name}</td>` +
       `<td><span class="pill p-${n.status}">${LABEL[n.status]}</span></td>` +
       `<td class="mod">${n.mod}</td>` +
-      `<td>${n.defect ? (n.status === "refuted" ? `<span class="invalid">${n.defect}</span>` : `<span class="defect">${n.defect}</span>`) : ""}</td>`;
+      `<td>${n.defect ? (n.status === "refuted" ? `<span class="invalid">${n.defect}</span>` : `<span class="defect">${n.defect}</span>`) : ""}</td>` +
+      `<td>${repairHTML(n, true)}</td>`;
     tr.tabIndex = 0;
     tr.addEventListener("click", () => openDetail(r[0]));
     tr.addEventListener("keydown", e => {
@@ -675,8 +1176,6 @@
   // ---------- detail drawer ----------
   const drawer = document.getElementById("drawer");
   const scrim  = document.getElementById("scrim");
-  const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const norm = t => t.replace(/\s+/g, " ").trim();
 
   const STRUCT = /^(Proof\.|Case |Rule |Subcase |Else|If |∎|Diagrammatically)/;
 
@@ -743,15 +1242,82 @@
   // ---------- tabs ----------
   const panes = { ours: document.getElementById("pane-ours"),
                   paper: document.getElementById("pane-paper"),
-                  sbs: document.getElementById("pane-sbs") };
+                };
   const tabBtns = [...document.querySelectorAll(".tabs button")];
   function showPane(k) {
     Object.entries(panes).forEach(([n, el]) => { el.hidden = n !== k; });
     tabBtns.forEach(b => b.setAttribute("aria-selected", String(b.dataset.pane === k)));
-    drawer.classList.toggle("wide", k === "sbs");
     drawer.querySelector(".dbody").scrollTop = 0;
   }
   tabBtns.forEach(b => b.addEventListener("click", () => showPane(b.dataset.pane)));
+  document.addEventListener("click", e => {
+    const a = e.target.closest && e.target.closest("a.xref");
+    if (!a) return;
+    e.preventDefault();
+    openDetail(a.dataset.open, a.dataset.ctor);
+    if (a.dataset.step !== undefined) {
+      const el = drawer.querySelector(`#d-steps .ver[data-attempt="${a.dataset.step}"]`);
+      if (el) { el.open = true; el.scrollIntoView({ block: "start" }); }
+    }
+  });
+
+  // ---- hover card: the signature behind a name ----
+  const tip = document.getElementById("tip");
+  const CTOR_LINE = /^\s+([^\s:()]+)\s*:/;
+  const ctorSig = (decl, ctor) => {
+    const lines = decl.split("\n"), out = [];
+    let inside = false;
+    for (const l of lines) {
+      const m = CTOR_LINE.exec(l);
+      if (m) { if (inside) break; inside = m[1] === ctor; }
+      else if (!l.trim()) { if (inside) break; continue; }
+      if (inside) out.push(l);
+    }
+    const indent = Math.min(...out.filter(l => l.trim()).map(l => l.length - l.trimStart().length));
+    return out.map(l => l.slice(isFinite(indent) ? indent : 0)).join("\n");
+  };
+  const tipFor = a => tipData(a.dataset.open, a.dataset.ctor);
+  const tipData = (id, ctor) => {
+    const n = node.get(id);
+    if (!n) return null;
+    if (n.fn) return { kind: "function", mod: n.mod, sig: n.sig, note: `${(usedBy.get(id) || []).length} result${(usedBy.get(id) || []).length === 1 ? "" : "s"} state it directly` };
+    if (n.type) {
+      if (ctor) return { kind: "constructor of " + n.ref, mod: n.mod, sig: ctorSig(n.decl, ctor) || ctor };
+      const head = n.decl.split("\n").find(l => l.trim()) || n.ref;
+      return { kind: "datatype", mod: n.mod, sig: head.replace(/\s*where\s*$/, ""), note: `${(TDEP[id] || []).length} datatype${(TDEP[id] || []).length === 1 ? "" : "s"} beneath · used by ${(usedBy.get(id) || []).length} result${(usedBy.get(id) || []).length === 1 ? "" : "s"}` };
+    }
+    const v = DET[id] || {};
+    const sig = (v.sig || "").split("\n\n")[0] || "—";
+    return { kind: `${n.ref} · ${LABEL[n.status]}`, mod: v.module || n.mod, sig, note: n.name };
+  };
+  let tipTimer = null;
+  const showTip = a => showTipAt(a.getBoundingClientRect(), tipFor(a));
+  const showTipAt = (r, d) => {
+    if (!d) return;
+    tip.innerHTML = `<div class="tk"><span>${esc(d.kind)}</span><span class="m">${esc(d.mod || "")}</span></div><pre>${esc(d.sig)}</pre>` +
+      (d.note ? `<div class="nm">${esc(d.note)}</div>` : "");
+    tip.hidden = false;
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let x = Math.min(Math.max(12, r.left), window.innerWidth - tw - 12);
+    let y = r.bottom + 8;
+    if (y + th > window.innerHeight - 12) y = Math.max(12, r.top - th - 8);
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  };
+  const hideTip = () => { clearTimeout(tipTimer); tip.hidden = true; };
+  drawer.addEventListener("mouseover", e => {
+    const a = e.target.closest && e.target.closest("a.xref");
+    if (!a) return;
+    clearTimeout(tipTimer);
+    tipTimer = setTimeout(() => showTip(a), 120);
+  });
+  drawer.addEventListener("mouseout", e => {
+    const a = e.target.closest && e.target.closest("a.xref");
+    if (a && !(e.relatedTarget && a.contains(e.relatedTarget))) hideTip();
+  });
+  drawer.addEventListener("focusin", e => { const a = e.target.closest && e.target.closest("a.xref"); if (a) showTip(a); });
+  drawer.addEventListener("focusout", hideTip);
+  drawer.querySelector(".dbody").addEventListener("scroll", hideTip, { passive: true });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") hideTip(); });
 
   const el = (tag, cls, txt) => {
     const e = document.createElement(tag);
@@ -789,59 +1355,91 @@
     if (a.note) { const q = elh("p", "pp", a.note); q.style.marginTop = "14px"; host.appendChild(q); }
   }
 
-  function renderSbs(v, host, n) {
-    host.textContent = "";
-    const a = v.agda;
-    host.appendChild(el("h4", null, "The paper's step against ours"));
-    if (!a || !a.paper) {
-      host.appendChild(elh("div", "coincide", a && a.note
-        ? a.note
-        : "Nothing to set apart: the paper's argument and ours take the same steps, so the Agda under “Our proof” is the transcription of both."));
-      return;
-    }
-    if (a.quote) host.appendChild(el("p", "quoteline", a.quote));
-    const grid = el("div", "sbs");
-    const left = el("div"), right = el("div");
-    left.appendChild(cap(a.err ? "The paper — rejected" : "The paper", a.err ? "no" : null));
-    left.appendChild(el("pre", "code" + (a.err ? " bad" : ""), a.paper));
-    if (a.err) left.appendChild(el("div", "errbox", a.err));
-    const okLabel = n.status === "refuted" ? "Ours — the refutation" : "Ours — accepted";
-    right.appendChild(cap(okLabel, n.status === "refuted" ? "no" : "ok"));
-    right.appendChild(el("pre", "code", a.ours));
-    grid.appendChild(left); grid.appendChild(right);
-    host.appendChild(grid);
-    if (a.note) { const q = elh("p", "pp", a.note); q.style.marginTop = "16px"; host.appendChild(q); }
-  }
+
 
   let lastFocus = null;
 
-  function openDetail(id) {
-    const n = node.get(id), v = DET[String(id)];
+  function openType(n, ctor) {
+    lastFocus = document.activeElement; rememberScroll();
+    currentCard = n.id;
+    document.getElementById("d-ref").textContent = (n.fn ? "function · " : "datatype · ") + n.raw;
+    document.getElementById("d-name").textContent = n.ref;
+    document.getElementById("d-pill").innerHTML = (n.fn ? `<span class="pill p-fn">defined</span>` : `<span class="pill p-type">declared</span>`) +
+      (n.origin ? `<span class="origin">${n.origin === "paper" ? "the paper's" : n.origin === "encoding" ? "encoding" : "this development's"}</span>` : "");
+    document.getElementById("d-mod").textContent = n.mod;
+    const users = (usedBy.get(n.id) || []).map(k => node.get(k)).filter(Boolean);
+    const inner = (TDEP[n.id] || []).map(k => node.get(String(k))).filter(Boolean);
+    const orig = n.editedFrom && node.get("T:" + n.editedFrom);
+    document.getElementById("d-account").innerHTML =
+      (n.account ? n.account + "<br><br>" : "") +
+      (orig ? `<strong>An edited form of <code>${esc(orig.ref)}</code></strong>, made for the repaired results that use it. ` : "") +
+      (users.length ? `In the statements of ${users.map(u => `<code>${esc(u.ref)}</code>`).join(", ")}${users.some(u => !u.type) && orig ? " (through their repaired forms)" : ""}.` : "In no numbered statement directly.") +
+      (inner.length ? ` Built from ${inner.map(u => `<code>${esc(u.ref)}</code>`).join(", ")}.` : "");
+    const st = document.getElementById("d-state"); st.innerHTML = ""; st.hidden = true;
+    renderOurs(n, null, ctor);
+    if (n.rules && Object.keys(n.rules).length || n.fidelity) {
+      const rows = Object.entries(n.rules || {}).map(([c, r]) =>
+        `<tr><td class="c">${esc(c)}</td><td class="r">${esc(r.rule || "—")}</td><td class="n">${r.note ? esc(r.note) : ""}</td></tr>`).join("");
+      document.getElementById("d-steps").insertAdjacentHTML("afterbegin",
+        `<div class="rules"><b>Rule by rule against the paper</b>` + (n.fidelity ? `<p class="fid">${esc(n.fidelity)}</p>` : "") +
+        (rows ? `<div class="table-scroll"><table><thead><tr><th>constructor</th><th>the paper's rule</th><th>where they differ</th></tr></thead><tbody>${rows}</tbody></table></div>` : "") + `</div>`);
+    }
+    tabBtns.forEach(b => { b.hidden = b.dataset.pane !== "ours"; });
+    showPane("ours");
+    linkify(drawer.querySelector(".dbody"));
+    scrim.hidden = false; drawer.hidden = false;
+    const hl = document.querySelector("#d-steps mark");
+    if (hl) hl.scrollIntoView({ block: "center" });
+    document.getElementById("d-close").focus({ preventScroll: true });
+  }
+
+  function openDetail(id, ctor) {
+    const n = node.get(String(id)), v = DET[String(id)];
+    if (n && n.type) return openType(n, ctor);
     if (!v) return;
-    lastFocus = document.activeElement;
+    currentCard = String(id);
+    tabBtns.forEach(b => { b.hidden = n.origin === "development" && b.dataset.pane !== "ours"; });
+    lastFocus = document.activeElement; rememberScroll();
     document.getElementById("d-ref").textContent = n.ref;
     document.getElementById("d-name").textContent = n.name;
     document.getElementById("d-pill").innerHTML =
-      `<span class="pill p-${n.status}">${LABEL[n.status]}</span>`;
+      `<span class="pill p-${n.status}">${LABEL[n.status]}</span>` +
+      (n.origin === "development" ? `<span class="origin">this development's</span>` : "");
     document.getElementById("d-mod").textContent = v.module;
     document.getElementById("d-account").innerHTML = v.account;
-    document.getElementById("d-sig").textContent = v.sig || "—";
-    const hy = document.getElementById("d-hyps");
-    hy.innerHTML = (v.hyps && v.hyps.length)
-      ? "<div class='hyps'><b>Proved conditionally on</b>" +
-        v.hyps.map(h => `<code>${h}</code>`).join("") + "</div>"
-      : "";
+    {
+      // the statement as printed, up to the proof, so the pane stands on its own
+      const st = [];
+      for (const b of blocks(v.paper || [])) {
+        if (b.t === "h" && /^Proof\./.test(b.s)) break;
+        if (b.t === "qed") break;
+        if (b.t === "h" || (b.s || "").startsWith(n.ref)) continue;
+        st.push("<p>" + esc(norm(b.s)) + "</p>");
+      }
+      const el = document.getElementById("d-state");
+      el.innerHTML = st.join("");
+      el.hidden = !st.length;
+    }
+    document.getElementById("d-account").innerHTML = v.account +
+      (n.repair ? `<div class="drepair"><b>${n.repairKind === "variant" ? "A variant" : "A repaired form"} — ${RLABEL[n.repairStatus] || n.repairStatus}</b>${repairHTML(n)}</div>` : "");
+    renderOurs(n, v);
     renderPaper(v, document.getElementById("d-paper"));
     renderAttempt(v, document.getElementById("d-attempt"));
-    renderSbs(v, document.getElementById("d-sbs"), n);
+    linkify(drawer.querySelector(".dbody"));
     showPane("ours");
     scrim.hidden = false; drawer.hidden = false;
-    document.getElementById("d-close").focus();
+    document.getElementById("d-close").focus({ preventScroll: true });
   }
 
+  // the graph's own scroll position survives opening and closing a card
+  const figure = document.querySelector(".figure");
+  let figScroll = 0;
+  drawer.addEventListener("transitionstart", () => {});
+  const rememberScroll = () => { figScroll = figure.scrollLeft; };
   function closeDetail() {
     drawer.hidden = true; scrim.hidden = true;
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    figure.scrollLeft = figScroll;
   }
 
   document.getElementById("d-close").addEventListener("click", closeDetail);

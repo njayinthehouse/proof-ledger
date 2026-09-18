@@ -88,10 +88,70 @@ def overlay(led, ann):
     for nid, patch in ann.get('detail', {}).items():
         if nid in led['detail']:
             led['detail'][nid].update(patch)
+    if 'changes' in ann:
+        led['changes'] = ann['changes']
+    known = {c['id'] for c in led.get('changes', [])}
+    def check_change(where, s, i):
+        if s.get('change') and s['change'] not in known:
+            raise SystemExit(f"{where}, attempt {i}: change '{s['change']}' is not declared in 'changes'")
+    for n in led['nodes']:
+        for i, s in enumerate(n.get('attempts') or [], 1):
+            check_change(f"result {n['id']}", s, i)
+    for section in ('types', 'functions'):
+        byid_t = {str(x['id']): x for x in led.get(section, [])}
+        for tid, patch in ann.get(section, {}).items():
+            if tid in byid_t:
+                byid_t[tid].update(patch)
+                # fidelity: a datatype the paper defines names a rule for every constructor
+                if section == 'types' and patch.get('origin') == 'paper':
+                    ctors = [m.group(1) for l in byid_t[tid]['decl'].split('\n')
+                             for m in [re.match(r'^\s+([^\s:()]+)\s*:', l)] if m]
+                    missing = [c for c in ctors if c not in (patch.get('rules') or {})]
+                    if missing:
+                        raise SystemExit(f"{tid}: paper datatype with no rule named for {missing}")
+            for i, s in enumerate(patch.get('attempts') or [], 1):
+                if s.get('outcome') not in ('checked', 'rejected', 'experiment', 'invalidated'):
+                    raise SystemExit(f"{tid}, attempt {i}: a definition's step is checked, rejected, experiment or invalidated")
+                if s.get('kind') not in ('original', 'repair', 'variant'):
+                    raise SystemExit(f"{tid}, attempt {i}: kind must be original, repair or variant")
+                if not s.get('because'):
+                    raise SystemExit(f"{tid}, attempt {i}: no 'because' — every step says what motivated it")
+                check_change(tid, s, i)
+            log_problems = []
+            check_log(tid, patch.get('attempts') or [], 'checked', log_problems)
+            if log_problems:
+                raise SystemExit('\n'.join(log_problems))
     for nid, extra in ann.get('deps', {}).items():
         led.setdefault('deps', {})[nid] = sorted(set(led.get('deps', {}).get(nid, [])) | set(extra),
-                                                 key=lambda s: [int(p) for p in str(s).split('.')])
+                                                 key=lambda s: [(0, int(p)) if p.isdigit() else (1, p)
+                                                                for p in re.findall(r'\d+|\D+', str(s))])
     return led
+
+def check_log(where, steps, stands, problems):
+    """A log is the history of one statement, so `proved` (or `checked`) is said once.
+
+    A proved statement is revisited only when a lemma under it falls or a result above
+    it needs another shape; the log then says `invalidated`, naming the change that did
+    it, before the next attempt. A second `proved` with nothing between is a different
+    statement — a supporting lemma, a piece of the result, a consequence — and belongs
+    in its own node, in one merged entry, or on the result it is about."""
+    standing = False
+    for i, s in enumerate(steps, 1):
+        o = s.get('outcome')
+        if o == 'experiment':
+            continue
+        if o == 'invalidated':
+            if not standing:
+                problems.append(f"{where}, attempt {i}: invalidated, but nothing {stands} stands before it")
+            if not s.get('change'):
+                problems.append(f"{where}, attempt {i}: invalidated by which change? name it in 'change'")
+            standing = False
+            continue
+        if standing:
+            problems.append(f"{where}, attempt {i}: follows a {stands} step with no 'invalidated' step between — "
+                            f"a supporting lemma is its own node, the pieces of one result are one entry, "
+                            f"and a consequence belongs on the result it is about")
+        standing = o == stands
 
 def cmd_build(a):
     here = Path(__file__).parent
@@ -118,6 +178,22 @@ def cmd_build(a):
     for n in led['nodes']:
         if n['status'] == 'refuted' and not n.get('defect'):
             problems.append(f"result {n['id']} is refuted but names no invalid step")
+        if n.get('status') in ('conjyes', 'conjno'):
+            problems.append(f"result {n['id']}: status {n['status']} is retired — a conjecture is open until settled; use proved/refuted/open")
+        if n.get('repair') and n.get('repairStatus') not in ('proved', 'assumed', 'refuted', 'open'):
+            problems.append(f"result {n['id']} carries a repair but no repairStatus (proved/assumed/refuted/open)")
+        if n.get('repairKind') not in (None, 'repaired', 'variant'):
+            problems.append(f"result {n['id']}: repairKind must be 'repaired' or 'variant'")
+        for i, s in enumerate(n.get('attempts') or [], 1):
+            if not s.get('what'):
+                problems.append(f"result {n['id']}, attempt {i}: no 'what'")
+            if s.get('outcome') not in ('proved', 'refuted', 'open', 'experiment', 'invalidated'):
+                problems.append(f"result {n['id']}, attempt {i}: outcome must be proved, refuted, open, experiment or invalidated")
+            if s.get('kind') not in ('original', 'repair', 'variant'):
+                problems.append(f"result {n['id']}, attempt {i}: kind must be original, repair or variant")
+            if not s.get('because'):
+                problems.append(f"result {n['id']}, attempt {i}: no 'because' — every step says what motivated it")
+        check_log(f"result {n['id']}", n.get('attempts') or [], 'proved', problems)
         if not n.get('name'):
             problems.append(f"result {n['id']} has no short name — annotate it")
     if problems:
