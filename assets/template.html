@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
 
 <style>
+  /* `hidden` must win over any display rule below (#drawer is display:flex) */
+  [hidden] { display: none !important; }
   :root {
     --ground:      #F6F7F9;
     --panel:       #FFFFFF;
